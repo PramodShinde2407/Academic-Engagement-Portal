@@ -1,0 +1,487 @@
+/* =========================
+   Home Page Container
+========================= */
+.home-container {
+    padding: 50px 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to bottom, #f4f4f9, #e0f2fe);
+    color: #111827;
+}
+
+/* =========================
+   Welcome Section
+========================= */
+.welcome-section {
+    text-align: center;
+    background-color: #ffffff;
+    color: #004080;
+    padding: 50px 30px;
+    border-radius: 15px;
+    margin-bottom: 50px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.welcome-section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: slideDown 0.8s ease-out;
+}
+
+.welcome-section p,
+.welcome-section ul {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    max-width: 750px;
+    margin: 0 auto;
+    animation: fadeIn 1.2s ease-in;
+}
+
+.welcome-section ul {
+    text-align: left;
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+.welcome-section ul li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.welcome-section ul li::before {
+    content: "✅";
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* =========================
+   Section Titles
+========================= */
+.clubs-section h2,
+.events-section h2,
+.info-section h2 {
+    font-size: 2.2rem;
+    color: #004080;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+}
+
+.clubs-section h2::after,
+.events-section h2::after,
+.info-section h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    margin: 8px auto 0;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* =========================
+   Cards Layout
+========================= */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* =========================
+   Individual Card
+========================= */
+.card {
+    background-color: white;
+    padding: 25px 20px;
+    border-radius: 15px;
+    width: 320px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #004080;
+    font-size: 1.4rem;
+}
+
+.card p {
+    flex-grow: 1;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.card button {
+    margin-top: 5px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background-color: #004080;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #003366;
+    transform: scale(1.05);
+}
+
+.join-btn {
+    background-color: #22c55e;
+    color: #0f172a;
+}
+
+.join-btn:hover {
+    background-color: #16a34a;
+    transform: scale(1.05);
+}
+
+/* =========================
+   Info Section
+========================= */
+.info-section {
+    margin-top: 50px;
+    background-color: #e0f2fe;
+    padding: 40px 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    animation: fadeIn 1s ease-in-out;
+}
+
+.info-section p {
+    max-width: 850px;
+    margin: 0 auto;
+    line-height: 1.8;
+    font-size: 1.15rem;
+}
+
+/* =========================
+   Animations
+========================= */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 992px) {
+    .cards-container {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .welcome-section h1 {
+        font-size: 2.2rem;
+    }
+
+    .clubs-section h2,
+    .events-section h2,
+    .info-section h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .card {
+        width: 90%;
+    }
+}
+
+
+/* Welcome Card */
+.welcome-card {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    background-color: #ffffff;
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    text-align: left;
+    color: #111827;
+    line-height: 1.7;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.welcome-card h1 {
+    font-size: 2.8rem;
+    color: #004080;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.welcome-card h3 {
+    color: #004080;
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    text-align: left;
+    width: 100%;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.welcome-card p {
+    font-size: 1.15rem;
+    margin-bottom: 18px;
+}
+
+.welcome-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.welcome-card ul li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+.welcome-card ul li::before {
+    content: "✅";
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1rem;
+    color: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .welcome-card {
+        padding: 30px 20px;
+    }
+
+    .welcome-card h1 {
+        font-size: 2.2rem;
+    }
+
+    .welcome-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .welcome-card p,
+    .welcome-card ul li {
+        font-size: 1rem;
+    }
+}
+
+/* Clubs Guide Section */
+.clubs-guide {
+    max-width: 900px;
+    margin: 30px auto 60px auto;
+    background-color: #e0f7fa;
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.clubs-guide h3 {
+    color: #004080;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.clubs-guide ol {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.clubs-guide ol li {
+    margin-bottom: 12px;
+}
+
+.clubs-guide ul {
+    padding-left: 25px;
+    margin: 8px 0 15px 0;
+}
+
+.clubs-guide ul li {
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.clubs-guide ul li::before {
+    content: "🔹";
+    position: absolute;
+    left: -20px;
+    top: 0;
+}
+
+.clubs-guide p {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Events Guide Section - same as Clubs Guide */
+.events-guide {
+    max-width: 900px;
+    margin: 30px auto 60px auto;
+    background-color: #e0f7fa;
+    /* same as Clubs Guide */
+    padding: 25px 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.events-guide h3 {
+    color: #004080;
+    /* same as Clubs Guide */
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.events-guide ol {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.events-guide ol li {
+    margin-bottom: 12px;
+}
+
+.events-guide ul {
+    padding-left: 25px;
+    margin: 8px 0 15px 0;
+}
+
+.events-guide ul li {
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.events-guide ul li::before {
+    content: "🔹";
+    /* same bullet style */
+    position: absolute;
+    left: -20px;
+    top: 0;
+}
+
+.events-guide p {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.discover-btn {
+    padding: 12px 25px;
+    background-color: #004080;
+    /* main theme blue */
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.discover-btn:hover {
+    background-color: #003366;
+    transform: scale(1.05);
+}
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  z-index: 9999;
+  animation: slideUp 0.4s ease;
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

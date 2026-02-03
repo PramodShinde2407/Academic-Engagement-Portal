@@ -1,0 +1,130 @@
+.about-page {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2937;
+  background: #f8fafc;
+  text-align: center;
+  padding: 0 20px;
+  margin-top: 30px;
+}
+
+/* Hero Section */
+.about-hero {
+background: linear-gradient(135deg, #e7d6ff, #4cabff);
+  color: #fff;
+  padding: 60px 20px;
+  border-radius: 12px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.about-hero h1 {
+  font-size: 38px;
+  margin-bottom: 15px;
+}
+
+.about-hero p {
+  font-size: 18px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Info Cards Section */
+.about-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.info-card {
+  background: #fff;
+  flex: 1 1 280px;
+  min-width: 280px;
+  padding: 25px 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.info-card h2 {
+  color: #2563eb;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.info-card p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Team Section */
+.team-section {
+  margin-bottom: 50px;
+}
+
+.team-section h2 {
+  color: #2563eb;
+  margin-bottom: 25px;
+  font-size: 26px;
+}
+
+.team-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+.team-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 200px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.team-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+.team-card h3 {
+  margin-bottom: 5px;
+  font-size: 18px;
+  color: #2563eb;
+}
+
+.team-card p {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* Footer */
+.about-footer {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-cards, .team-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}

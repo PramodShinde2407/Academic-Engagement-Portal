@@ -1,0 +1,101 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  max-width: 400px;
+  background-color: #fff;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 4px 0;
+}
+
+.card button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.card button:hover {
+  background-color: #0056b3;
+}
+
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p {
+  margin: 4px 0;
+}
+
+.card button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.card button:hover {
+  background-color: #0056b3;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: flex-start; /* buttons at right */
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.details-btn {
+  background-color: #e89700 !important; /* blue for details */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.details-btn:hover {
+  background-color: #d18800 !important;
+  transform: scale(1.05);
+}
+
+.card button {
+  background-color: #22c55e; /* green for join */
+  color: #0f172a;
+}
+
+.card button:hover {
+  background-color: #16a34a;
+  transform: scale(1.05);
+}
+

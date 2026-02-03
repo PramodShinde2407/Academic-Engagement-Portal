@@ -1,0 +1,94 @@
+/* Page wrapper */
+.club-join-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background-color: #f3f6f9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card form */
+.club-join-form {
+  background-color: #fff;
+  width: 600px;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  border-top: 5px solid #004080;
+}
+
+/* Headings */
+.club-join-form h2 {
+  color: #004080;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.club-join-form h3 {
+  color: #004080;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* Instruction */
+.form-instruction {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Inputs and textareas */
+.club-join-form input,
+.club-join-form textarea {
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.club-join-form input:focus,
+.club-join-form textarea:focus {
+  border-color: #004080;
+  box-shadow: 0 0 5px rgba(0,102,204,0.3);
+  outline: none;
+}
+
+/* Textarea */
+.club-join-form textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+/* Button */
+.club-join-form button {
+  padding: 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: #004080;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.2s;
+}
+
+.club-join-form button:hover {
+  background-color: #004080;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .club-join-form {
+    width: 90%;
+    padding: 30px 20px;
+  }
+}

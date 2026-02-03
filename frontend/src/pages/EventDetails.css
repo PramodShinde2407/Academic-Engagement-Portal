@@ -1,0 +1,363 @@
+/* ===========================
+   EVENT CARD CONTAINER
+=========================== */
+.event-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* ===========================
+   EVENT CARD
+=========================== */
+.event-card {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.event-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+
+.event-card p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #4b5563;
+}
+
+/* ===========================
+   EVENT INFO
+=========================== */
+.event-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.event-info span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.event-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.event-buttons button {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-btn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+.details-btn {
+  background: #0055ff;
+  color: #ffffff;
+}
+
+.details-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(107, 114, 128, 0.3);
+}
+
+/* ===========================
+   TOAST MESSAGE
+=========================== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+.toast.success {
+  background: #16a34a;
+}
+
+.toast.error {
+  background: #dc2626;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================
+   EVENT DETAILS PAGE
+=========================== */
+.event-details-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.event-details-container h1 {
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: #1f2937;
+}
+
+.event-details-container p {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #4b5563;
+}
+
+/* Edit form in details page */
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.edit-buttons button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+.cancel-btn {
+  background: #9ca3af;
+  color: #fff;
+}
+
+.delete-btn {
+  background: #dc2626;
+  color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===========================
+   EVENT DETAILS PAGE BUTTON COLORS
+=========================== */
+
+/* Edit Event Details button (blue) */
+.event-buttons .edit-btn {
+  background: #0051ff; /* Blue background */
+  color: #ffffff;         /* Black text */
+}
+
+.event-buttons .edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Save Changes button (green) */
+.edit-buttons .save-btn {
+  background: #2dc959; /* Green background */
+  color: #ffffff;         /* Black text */
+}
+
+.edit-buttons .save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(22, 163, 74, 0.3);
+  background-color: #00b633;
+}
+
+/* Cancel button remains gray */
+.edit-buttons .cancel-btn {
+  background: #9ca3af;
+  color: #000; /* Black text */
+}
+
+.edit-buttons .cancel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(156, 163, 175, 0.3);
+  background-color:#82868c ;
+}
+/* ===========================
+   DELETE EVENT BUTTON STYLING
+=========================== */
+.event-buttons .delete-btn {
+  background: #e50000; /* Darker red */
+  color: #ffffff;          /* Black text */
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); /* subtle shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-buttons .delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(170, 0, 0, 0.4); /* slightly stronger shadow on hover */
+  background-color: #cf0000;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ===========================
+   TOAST MESSAGES (EventDetails)
+=========================== */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.4s ease;
+  z-index: 9999;
+}
+
+/* ===========================
+   DELETE CONFIRM TOAST
+=========================== */
+.delete-confirm-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #ffffff;
+  padding: 16px 18px;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.4s ease;
+  z-index: 9999;
+  min-width: 260px;
+}
+
+.delete-confirm-toast p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.delete-confirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.delete-confirm-buttons .confirm-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.delete-confirm-buttons .cancel-btn {
+  background: #e5e7eb;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.delete-confirm-buttons .cancel-btn {
+  background: #e5e7eb; /* light gray background */
+  color: #000;          /* black text */
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}

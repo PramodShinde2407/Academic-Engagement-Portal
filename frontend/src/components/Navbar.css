@@ -1,0 +1,56 @@
+/* Navbar container */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+  background-color: #004080; /* college blue */
+  color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Left side: circle + title */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* small gap between circle and title */
+}
+
+/* Portal title */
+.portal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Right side links */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* space between links */
+}
+
+/* Links style */
+.nav-right a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-right a:hover {
+  text-decoration: underline;
+}
+
+/* Profile circle */
+.profile-circle {
+  width: 38px;
+  height: 38px;
+  background-color: #c6c6c6; /* green */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  color: #0f172a; /* dark text inside */
+}

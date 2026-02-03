@@ -1,0 +1,93 @@
+.contact-page {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  color: #1f2937;
+  padding: 40px 20px;
+  background: #f8fafc;
+}
+
+.contact-hero {
+  margin-bottom: 40px;
+}
+
+.contact-hero h1 {
+  font-size: 36px;
+  color: #004080;
+  margin-bottom: 10px;
+}
+
+.contact-hero p {
+  font-size: 16px;
+  color: #4b5563;
+}
+
+.contact-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contact-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  flex: 1 1 250px;
+  min-width: 250px;
+  text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.contact-card h2 {
+  color: #004080;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.contact-card p {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.contact-card a {
+  color: #004080;
+  text-decoration: underline;
+}
+
+.contact-card a:hover {
+  color: #00254a;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.social-icons a {
+  text-decoration: none;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.social-icons a:hover {
+  color: #004080;
+}
+
+.contact-footer {
+  font-size: 0.9rem;
+  color: #000000;
+  margin-top: 50px;
+  background-color: #eeeeee;
+  border-radius: 10px;
+}
+
+.contact-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}

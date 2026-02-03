@@ -1,0 +1,135 @@
+/* Page wrapper */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f4; /* calm light gray */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card style form */
+.auth-form {
+  background-color: #ffffff;
+  padding: 35px 25px;
+  border-radius: 10px;
+  width: 360px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #004080; /* subtle college blue */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Heading */
+.auth-form h2 {
+  color: #004080;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Inputs and selects */
+.auth-form input,
+.auth-form select {
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #004080;
+  box-shadow: 0 0 5px rgba(0, 64, 128, 0.3);
+  outline: none;
+}
+
+/* Button */
+.auth-form button {
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  background-color: #004080;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-form button:hover {
+  background-color: #003366;
+}
+
+/* Links (optional) */
+.auth-form a {
+  text-decoration: none;
+  color: #004080;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+  display: block;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .auth-form {
+    width: 90%;
+    padding: 30px 20px;
+  }
+}
+
+/* Message box */
+.auth-message {
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  animation: slideFade 0.4s ease;
+}
+
+.auth-message.success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.auth-message.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Smooth animation */
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Kill Chrome default focus junk */
+input:focus,
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Remove Chrome autofill yellow */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  -webkit-text-fill-color: #1f2937;
+}

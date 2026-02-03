@@ -1,0 +1,151 @@
+/* ===============================
+   PAGE WRAPPER
+================================ */
+.event-register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============================
+   EVENT INFO CARD
+================================ */
+.event-info-box {
+  background: #ffffff;
+  max-width: 520px;
+  width: 100%;
+  padding: 22px 24px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  margin-bottom: 25px;
+  animation: fadeUp 0.4s ease;
+}
+
+.event-info-box h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: #1f2937;
+}
+
+.event-info-box p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* ===============================
+   FORM CARD
+================================ */
+.event-register-form {
+  background: #ffffff;
+  max-width: 520px;
+  width: 100%;
+  padding: 26px 28px;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
+  animation: fadeUp 0.5s ease;
+}
+
+.event-register-form h2 {
+  margin-bottom: 18px;
+  font-size: 20px;
+  color: #111827;
+  text-align: center;
+}
+
+/* ===============================
+   INPUTS & TEXTAREA
+================================ */
+.event-register-form input,
+.event-register-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.event-register-form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.event-register-form input:focus,
+.event-register-form textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ===============================
+   SUBMIT BUTTON
+================================ */
+.event-register-form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.event-register-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.event-register-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   TOAST (react-toastify override)
+================================ */
+.Toastify__toast {
+  border-radius: 14px !important;
+  padding: 14px 18px !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
+  color: #065f46 !important;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2) !important;
+  color: #7f1d1d !important;
+}
+
+.Toastify__close-button {
+  color: #000 !important;
+  opacity: 0.6;
+}
+
+/* ===============================
+   ANIMATION
+================================ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
