@@ -8,8 +8,10 @@ import approvalRoutes from "./routes/approval.routes.js";
 import errorHandler from "./middlewares/error.middleware.js";
 import clubMemberRoutes from "./routes/clubMember.routes.js";
 
-import eventRegistrationRoutes from"./routes/eventRegistration.routes.js"
+import eventRegistrationRoutes from "./routes/eventRegistration.routes.js"
 import volunteerRoutes from "./routes/volunteer.routes.js";
+import permissionRoutes from "./routes/permission.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 import cors from "cors";
 
 
@@ -34,6 +36,8 @@ app.use("/api/approvals", approvalRoutes);
 app.use("/api/club-members", clubMemberRoutes);
 app.use("/api/event-registrations", eventRegistrationRoutes);
 app.use("/api/volunteers", volunteerRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 
 /* Error handler */

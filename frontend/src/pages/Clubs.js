@@ -13,7 +13,7 @@ export default function Clubs() {
   const [toast, setToast] = useState(null);
   const [toastType, setToastType] = useState("success");
 
-  const user = JSON.parse(localStorage.getItem("user")); // { id, role_id, name }
+  const user = JSON.parse(localStorage.getItem("user") || "null"); // { id, role_id, name }
 
   const fetchClubs = async () => {
     try {
@@ -77,7 +77,7 @@ export default function Clubs() {
         <h2>All Clubs</h2>
 
         {/* Admin Add Club Section */}
-        {user.role_id === 4 && (
+        {user?.role_id === 4 && (
           <div className="add-club-form">
             <h3>Add New Club</h3>
 

@@ -16,6 +16,9 @@ import EventDetails from "./pages/EventDetails";
 import { useLocation } from "react-router-dom";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import PermissionRequestForm from "./components/PermissionRequestForm";
+import MyRequestsList from "./components/MyRequestsList";
+import ApprovalDashboard from "./components/ApprovalDashboard";
 
 function App() {
   return (
@@ -27,7 +30,11 @@ function App() {
         <Route path="/Signup" element={<Register />} />
         <Route path="/clubs" element={<Clubs />} />
         <Route path="/admin/create-event" element={<AdminCreateEvent />} />
-        <Route path="/permissions" element={<div><h2>Permissions Page</h2></div>} />
+
+        {/* Permission System Routes */}
+        <Route path="/create-permission" element={<PermissionRequestForm />} />
+        <Route path="/my-requests" element={<MyRequestsList />} />
+        <Route path="/approvals" element={<ApprovalDashboard />} />
         <Route path="/clubs" element={<ClubsPage />} />
         <Route path="/clubs/join/:id" element={<ClubJoinPageWrapper />} />
         <Route path="/clubs/:clubId" element={<ClubDetails />} /> {/* dynamic route */}

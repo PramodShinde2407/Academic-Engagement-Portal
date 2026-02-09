@@ -85,12 +85,22 @@ export default function HomePage() {
                                 <button onClick={() => navigate(`/clubs/${club.club_id}`)}>
                                     Visit Club
                                 </button>
-                                {user && (
+                                {user ? (
                                     <button
                                         className="join-btn"
                                         onClick={() => navigate(`/clubs/join/${club.club_id}`)}
                                     >
                                         Join Club
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="login-required-btn"
+                                        onClick={() => {
+                                            showToast("Please login or signup to join clubs", "error");
+                                            setTimeout(() => navigate("/login"), 1500);
+                                        }}
+                                    >
+                                        Login to Join
                                     </button>
                                 )}
                             </div>
@@ -161,7 +171,7 @@ export default function HomePage() {
                                 <button onClick={() => navigate(`/events/${event.event_id}`)}>
                                     View Event/Session
                                 </button>
-                                {user && (
+                                {user ? (
                                     <button
                                         className="join-btn"
                                         onClick={() => {
@@ -170,7 +180,16 @@ export default function HomePage() {
                                     >
                                         Join Event/Session
                                     </button>
-
+                                ) : (
+                                    <button
+                                        className="login-required-btn"
+                                        onClick={() => {
+                                            showToast("Please login or signup to register for events", "error");
+                                            setTimeout(() => navigate("/login"), 1500);
+                                        }}
+                                    >
+                                        Login to Register
+                                    </button>
                                 )}
                             </div>
                         ))

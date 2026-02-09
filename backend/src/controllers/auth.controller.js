@@ -26,7 +26,7 @@ export const register = async (req, res, next) => {
     }
 
     // === Club Head key validation ===
-    if (role[0].role_name === "Club Head") {
+    else if (role[0].role_name === "Club Head") {
       const club = await ClubModel.getBySecretKey(secret_key);
       if (!club || club.club_head_id) {
         return res.status(400).json({ message: "Invalid or used Club Key" });
@@ -35,16 +35,65 @@ export const register = async (req, res, next) => {
       // will assign club_head_id after user creation
     }
 
-    // === Teacher Key validation ===
-    if (role[0].role_name === "Teacher") {
-      const [teacherKeyRow] = await db.query(
-        "SELECT * FROM teacher_key WHERE key_value = ?",
+    // === Faculty Key validation ===
+    else if (role[0].role_name === "Faculty") {
+      const [facultyKeyRow] = await db.query(
+        "SELECT * FROM faculty_key WHERE key_value = ?",
         [secret_key]
       );
-      if (!teacherKeyRow.length) {
-        return res.status(400).json({ message: "Invalid Teacher Key" });
+      if (!facultyKeyRow.length) {
+        return res.status(400).json({ message: "Invalid Faculty Key" });
       }
     }
+
+    // === Club Mentor Key validation ===
+    else if (role[0].role_name === "Club Mentor") {
+      const [mentorKeyRow] = await db.query(
+        "SELECT * FROM club_mentor_key WHERE key_value = ?",
+        [secret_key]
+      );
+      if (!mentorKeyRow.length) {
+        return res.status(400).json({ message: "Invalid Club Mentor Key" });
+      }
+    }
+
+    // === Estate Manager Key validation ===
+    else if (role[0].role_name === "Estate Manager") {
+      const [estateKeyRow] = await db.query(
+        "SELECT * FROM estate_manager_key WHERE key_value = ?",
+        [secret_key]
+      );
+      if (!estateKeyRow.length) {
+        return res.status(400).json({ message: "Invalid Estate Manager Key" });
+      }
+    }
+
+    // === Principal Key validation (one-time use) ===
+    else if (role[0].role_name === "Principal") {
+      const [principalKeyRow] = await db.query(
+        "SELECT * FROM principal_key WHERE key_value = ? AND used = 0",
+        [secret_key]
+      );
+      if (!principalKeyRow.length) {
+        return res.status(400).json({ message: "Invalid or used Principal Key" });
+      }
+      // mark key used
+      await db.query("UPDATE principal_key SET used = 1 WHERE key_value = ?", [secret_key]);
+    }
+
+    // === Director Key validation (one-time use) ===
+    else if (role[0].role_name === "Director") {
+      const [directorKeyRow] = await db.query(
+        "SELECT * FROM director_key WHERE key_value = ? AND used = 0",
+        [secret_key]
+      );
+      if (!directorKeyRow.length) {
+        return res.status(400).json({ message: "Invalid or used Director Key" });
+      }
+      // mark key used
+      await db.query("UPDATE director_key SET used = 1 WHERE key_value = ?", [secret_key]);
+    }
+
 
 
     // Hash password
@@ -106,4 +155,5 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+
 

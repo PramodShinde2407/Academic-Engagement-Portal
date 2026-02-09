@@ -21,11 +21,18 @@ export default function Account() {
   const [clubToLeave, setClubToLeave] = useState(null);
   const [events, setEvents] = useState([]);
 
+  // Roles that should only see profile info (no events/clubs)
+  const profileOnlyRoles = ["Club Mentor", "Estate Manager", "Principal", "Director"];
+  const isProfileOnly = profileOnlyRoles.includes(user?.role_name);
 
   useEffect(() => {
-    fetchMyClubs();
-    fetchMyEvents(); // 👈 ADD THIS
-
+    // Only fetch clubs and events if user is not a profile-only role
+    if (!isProfileOnly) {
+      fetchMyClubs();
+      fetchMyEvents();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchMyClubs = async () => {
@@ -45,6 +52,7 @@ export default function Account() {
   // 🔹 LOGOUT
   const confirmLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setShowConfirm(false);
     setToast("Logged out successfully ✔️");
     setTimeout(() => {
@@ -114,42 +122,49 @@ export default function Account() {
           <p><b>Year:</b> {user?.year}</p>
         </div>
 
-<div>
-  <h3>Events & Sessions</h3>
-</div>
-<br/>
-        {events.length === 0 ? (
-          <p>You have not registered for any events yet.</p>
-        ) : (
-          <div className="events-grid">
-            {events.map((event) => (
-              <EventCard key={event.event_id} event={event} />
-            ))}
-          </div>
+        {/* Events & Sessions - Only show for non-profile-only roles */}
+        {!isProfileOnly && (
+          <>
+            <div>
+              <h3>Events & Sessions</h3>
+            </div>
+            <br />
+            {events.length === 0 ? (
+              <p>You have not registered for any events yet.</p>
+            ) : (
+              <div className="events-grid">
+                {events.map((event) => (
+                  <EventCard key={event.event_id} event={event} />
+                ))}
+              </div>
+            )}
+          </>
         )}
 
 
-        {/* Clubs */}
-        <div className="account-card">
-          <h3>Clubs Membership</h3>
-          {clubs.length === 0 ? (
-            <p>You are not a member of any clubs yet.</p>
-          ) : (
-            <div className="clubs-grid">
-              {clubs.map((c) => (
-                <div key={c.club_id} className="club-card-wrapper">
-                  <ClubCard club={c} />
-                  <button
-                    className="leave-club-btn"
-                    onClick={() => askLeaveClub(c)}
-                  >
-                    Leave Club
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Clubs - Only show for non-profile-only roles */}
+        {!isProfileOnly && (
+          <div className="account-card">
+            <h3>Clubs Membership</h3>
+            {clubs.length === 0 ? (
+              <p>You are not a member of any clubs yet.</p>
+            ) : (
+              <div className="clubs-grid">
+                {clubs.map((c) => (
+                  <div key={c.club_id} className="club-card-wrapper">
+                    <ClubCard club={c} />
+                    <button
+                      className="leave-club-btn"
+                      onClick={() => askLeaveClub(c)}
+                    >
+                      Leave Club
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 🔴 LOGOUT CONFIRM */}

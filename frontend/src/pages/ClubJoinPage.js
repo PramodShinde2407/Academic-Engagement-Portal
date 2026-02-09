@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import "./ClubJoinPage.css";
 
 export default function ClubJoinPage() {
     const { clubId } = useParams();
+    const navigate = useNavigate();
 
     const [club, setClub] = useState({});
     const [formData, setFormData] = useState({
@@ -21,13 +22,28 @@ export default function ClubJoinPage() {
         extraNotes: ""
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isChecking, setIsChecking] = useState(true);
 
+    // IMMEDIATE authentication check on mount
     useEffect(() => {
-        // Fetch club details
-        api.get(`/clubs/${clubId}`)
-            .then(res => setClub(res.data))
-            .catch(err => console.error("Failed to fetch club details", err));
-    }, [clubId]);
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            navigate("/login", { replace: true });
+        } else {
+            setIsAuthenticated(true);
+        }
+        setIsChecking(false);
+    }, [navigate]);
+
+    // Fetch club details only if authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            api.get(`/clubs/${clubId}`)
+                .then(res => setClub(res.data))
+                .catch(err => console.error("Failed to fetch club details", err));
+        }
+    }, [clubId, isAuthenticated]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -94,6 +110,11 @@ export default function ClubJoinPage() {
             setIsSubmitting(false);
         }
     };
+
+    // Don't render anything until authentication is verified
+    if (isChecking || !isAuthenticated) {
+        return null;
+    }
 
     return (
         <div className="club-join-container">

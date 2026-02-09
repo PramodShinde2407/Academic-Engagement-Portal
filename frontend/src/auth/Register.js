@@ -21,7 +21,11 @@ export default function RegisterPage() {
       .then((res) => setRoles(res.data))
       .catch(() => {
         setType("error");
-        setMessage("Failed to load roles");
+        setMessage("Failed to load roles — defaulting to Student role");
+        // Fallback so signup still works if backend/DB is unavailable
+        const fallback = [{ role_id: 1, role_name: "Student" }];
+        setRoles(fallback);
+        setRoleId(1);
       });
   }, []);
 
@@ -36,11 +40,15 @@ export default function RegisterPage() {
       { name: "Full Name", value: name },
       { name: "Email", value: email },
       { name: "Password", value: password },
-      { name: "Department", value: department },
     ];
 
-    // Only check year if role is Student or Club Head
+    // Only check department for roles that show it
     const selectedRole = roles.find(r => r.role_id === roleId);
+    if (!["Estate Manager", "Principal", "Director"].includes(selectedRole?.role_name)) {
+      fields.push({ name: "Department", value: department });
+    }
+
+    // Only check year if role is Student or Club Head
     if (selectedRole?.role_name === "Student" || selectedRole?.role_name === "Club Head") {
       fields.push({ name: "Year", value: year });
     }
@@ -72,7 +80,8 @@ export default function RegisterPage() {
     }
 
     // Key validation for roles that need it
-    if (["Club Head", "Admin", "Faculty"].includes(selectedRole?.role_name) && !secretKey) {
+    const rolesRequiringKeys = ["Club Head", "Admin", "Faculty", "Club Mentor", "Estate Manager", "Principal", "Director"];
+    if (rolesRequiringKeys.includes(selectedRole?.role_name) && !secretKey) {
       setType("error");
       return setMessage(`${selectedRole.role_name} role requires a secret key`);
     }
@@ -104,17 +113,16 @@ export default function RegisterPage() {
   };
 
   // Determine if current role requires a key
-  const requiresKey = ["Club Head", "Admin", "Faculty"].includes(
+  const rolesRequiringKeys = ["Club Head", "Admin", "Faculty", "Club Mentor", "Estate Manager", "Principal", "Director"];
+  const requiresKey = rolesRequiringKeys.includes(
     roles.find(r => r.role_id === roleId)?.role_name
   );
 
   // Determine placeholder based on role
-  const keyPlaceholder =
-    roles.find(r => r.role_id === roleId)?.role_name === "Admin"
-      ? "Enter Admin Key"
-      : roles.find(r => r.role_id === roleId)?.role_name === "Faculty"
-        ? "Enter Faculty Key"
-        : "Enter Club Secret Key";
+  const currentRoleName = roles.find(r => r.role_id === roleId)?.role_name;
+  const keyPlaceholder = currentRoleName === "Club Head"
+    ? "Enter Club Secret Key"
+    : `Enter ${currentRoleName} Key`;
 
   // Determine if year should be shown
   const showYear = ["Student", "Club Head"].includes(roles.find(r => r.role_id === roleId)?.role_name);
@@ -129,6 +137,18 @@ export default function RegisterPage() {
             {message}
           </div>
         )}
+
+        <select
+          value={roleId}
+          onChange={(e) => setRoleId(Number(e.target.value))}
+          className="role-select"
+        >
+          {roles.map((role) => (
+            <option key={role.role_id} value={role.role_id}>
+              {role.role_name}
+            </option>
+          ))}
+        </select>
 
         <input
           type="text"
@@ -151,12 +171,15 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <input
-          type="text"
-          placeholder="Department"
-          value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-        />
+        {/* Hide Department for high-level authorities */}
+        {!["Estate Manager", "Principal", "Director"].includes(currentRoleName) && (
+          <input
+            type="text"
+            placeholder="Department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+          />
+        )}
 
         {showYear && (
           <input
@@ -168,17 +191,6 @@ export default function RegisterPage() {
             max="4"
           />
         )}
-
-        <select
-          value={roleId}
-          onChange={(e) => setRoleId(Number(e.target.value))}
-        >
-          {roles.map((role) => (
-            <option key={role.role_id} value={role.role_id}>
-              {role.role_name}
-            </option>
-          ))}
-        </select>
 
         {requiresKey && (
           <input

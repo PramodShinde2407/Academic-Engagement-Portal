@@ -37,7 +37,7 @@ export default function ClubDetails() {
     club_head_id: "",
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   useEffect(() => {
     fetchClub();
@@ -69,7 +69,7 @@ export default function ClubDetails() {
       }));
       // 🔼🔼🔼 ADD THIS BLOCK EXACTLY HERE 🔼🔼🔼
 
-      if (user.id === res.data.club_head_id) {
+      if (user && user.id === res.data.club_head_id) {
         setFormData({
           name: res.data.name || "",
           description: res.data.description || "",

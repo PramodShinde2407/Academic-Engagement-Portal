@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,10 +8,13 @@ import "./EventRegisterPage.css";
 export default function EventRegisterPage() {
   const { eventId } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Use event from state if available
   const [event, setEvent] = useState(location.state?.event || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -24,14 +27,25 @@ export default function EventRegisterPage() {
     notes: ""
   });
 
-  // Fetch event details ONLY if not passed from state
+  // IMMEDIATE authentication check on mount
   useEffect(() => {
-    if (!event) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      navigate("/login", { replace: true });
+    } else {
+      setIsAuthenticated(true);
+    }
+    setIsChecking(false);
+  }, [navigate]);
+
+  // Fetch event details ONLY if authenticated and not passed from state
+  useEffect(() => {
+    if (isAuthenticated && !event) {
       api.get(`/events/${eventId}`)
         .then(res => setEvent(res.data))
         .catch(() => toast.error("Failed to load event details ❌"));
     }
-  }, [eventId, event]);
+  }, [eventId, event, isAuthenticated]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,6 +126,10 @@ export default function EventRegisterPage() {
     }
   };
 
+  // Don't render anything until authentication is verified
+  if (isChecking || !isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="event-register-container">

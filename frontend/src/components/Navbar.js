@@ -59,9 +59,23 @@ export default function Navbar() {
       {/* Right side links */}
       <div className="nav-right">
         <Link to="/">Home</Link>
-        <Link to="/events">Events</Link>
-        <Link to="/clubs">Clubs</Link>
-        <Link to="/permissions">Permissions</Link>
+
+        {/* Hide Events and Clubs for authorities */}
+        {!["Club Mentor", "Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
+          <>
+            <Link to="/events">Events</Link>
+            <Link to="/clubs">Clubs</Link>
+          </>
+        )}
+
+        {/* Permission System Links */}
+        {user?.role_name === "Club Head" && (
+          <Link to="/my-requests">My Requests</Link>
+        )}
+
+        {["Club Mentor", "Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
+          <Link to="/approvals">Approvals</Link>
+        )}
 
         {!user ? (
           <>

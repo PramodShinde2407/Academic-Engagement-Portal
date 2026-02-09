@@ -4,7 +4,8 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f4f4f4; /* calm light gray */
+  background-color: #f4f4f4;
+  /* calm light gray */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -15,7 +16,8 @@
   border-radius: 10px;
   width: 360px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #004080; /* subtle college blue */
+  border-top: 4px solid #004080;
+  /* subtle college blue */
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -40,6 +42,14 @@
   border: 1px solid #ccc;
   font-size: 1rem;
   transition: border 0.2s, box-shadow 0.2s;
+}
+
+/* Distinct style for the top role selector */
+.role-select {
+  border: 2px solid #004080 !important;
+  background-color: #f8fbff;
+  font-weight: 600;
+  color: #004080;
 }
 
 .auth-form input:focus,
@@ -115,6 +125,7 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
