@@ -58,7 +58,7 @@ export const PermissionModel = {
     /**
      * Get pending requests for a specific role
      */
-    findPendingForRole: async (roleName) => {
+    findPendingForRole: async (roleName, userId = null) => {
         const statusMap = {
             'Club Mentor': 'pending_club_mentor',
             'Estate Manager': 'pending_estate_manager',
@@ -69,8 +69,7 @@ export const PermissionModel = {
         const status = statusMap[roleName];
         if (!status) return [];
 
-        const [rows] = await db.query(
-            `SELECT 
+        let query = `SELECT 
         pr.*,
         u.name as club_head_name,
         u.email as club_head_email,
@@ -78,10 +77,19 @@ export const PermissionModel = {
        FROM permission_request pr
        JOIN user u ON pr.club_head_id = u.user_id
        LEFT JOIN club c ON pr.club_id = c.club_id
-       WHERE pr.current_status = ?
-       ORDER BY pr.created_at ASC`,
-            [status]
-        );
+       WHERE pr.current_status = ?`;
+
+        const params = [status];
+
+        // For Club Mentors, only show requests for their clubs
+        if (roleName === 'Club Mentor' && userId) {
+            query += ` AND c.club_mentor_id = ?`;
+            params.push(userId);
+        }
+
+        query += ` ORDER BY pr.created_at ASC`;
+
+        const [rows] = await db.query(query, params);
 
         return rows;
     },

@@ -1,10 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./Navbar.css";
+import NotificationBell from "./NotificationBell";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
+
+  // Helper function to check if link is active
+  const isActive = (path) => location.pathname === path;
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -39,11 +44,18 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null);
+    navigate("/");
+  };
+
   const firstLetter = user?.name?.charAt(0).toUpperCase();
 
   return (
     <nav className="navbar">
-      {/* Left side: circle + title */}
+      {/* Left side: Profile circle + PICT PORTAL logo */}
       <div className="nav-left">
         {user && (
           <div
@@ -53,36 +65,47 @@ export default function Navbar() {
             {firstLetter}
           </div>
         )}
-        <h2 className="portal-title">PICT Portal</h2>
+        <h2 className="portal-title">PICT PORTAL</h2>
       </div>
 
-      {/* Right side links */}
-      <div className="nav-right">
-        <Link to="/">Home</Link>
+      {/* Center: Main navigation links */}
+      <div className="nav-center">
+        <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>Home</Link>
 
         {/* Hide Events and Clubs for authorities */}
-        {!["Club Mentor", "Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
+        {!["Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
           <>
-            <Link to="/events">Events</Link>
-            <Link to="/clubs">Clubs</Link>
+            <Link to="/events" className={`nav-link ${isActive('/events') ? 'active' : ''}`}>Events</Link>
+            <Link to="/clubs" className={`nav-link ${isActive('/clubs') ? 'active' : ''}`}>Clubs</Link>
           </>
         )}
 
         {/* Permission System Links */}
         {user?.role_name === "Club Head" && (
-          <Link to="/my-requests">My Requests</Link>
+          <Link to="/my-requests" className={`nav-link ${isActive('/my-requests') ? 'active' : ''}`}>My Requests</Link>
         )}
 
         {["Club Mentor", "Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
-          <Link to="/approvals">Approvals</Link>
+          <Link to="/approvals" className={`nav-link ${isActive('/approvals') ? 'active' : ''}`}>Approvals</Link>
         )}
+      </div>
 
-        {!user ? (
+      {/* Right side: Notification Bell + Auth buttons */}
+      <div className="nav-right">
+        {user && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/Signup">Signup</Link>
+            <NotificationBell />
+            <button className="auth-btn logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
           </>
-        ) : null}
+        )}
+        {!user && (
+          <>
+            <Link to="/login" className="auth-btn auth-btn-login">Login</Link>
+            <Link to="/Signup" className="auth-btn auth-btn-signup">Signup</Link>
+          </>
+        )}
       </div>
     </nav>
   );

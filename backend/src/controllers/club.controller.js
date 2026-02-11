@@ -9,7 +9,7 @@ export const createClub = async (req, res, next) => {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    const { name, description, secretKey } = req.body;
+    const { name, description, secretKey, permissionEmails, clubMentorKey } = req.body;
 
     if (!name || !description || !secretKey) {
       return res.status(400).json({ message: "All fields required" });
@@ -19,7 +19,10 @@ export const createClub = async (req, res, next) => {
       name,
       description,
       club_head_id: null,
-      secret_key: secretKey // ✅ ADMIN-PROVIDED KEY
+      club_mentor_id: null,
+      secret_key: secretKey, // ✅ ADMIN-PROVIDED KEY for Club Head
+      permission_emails: permissionEmails || null,
+      club_mentor_key: clubMentorKey || null // ✅ KEY for Club Mentor
     });
 
     res.status(201).json({
@@ -33,9 +36,24 @@ export const createClub = async (req, res, next) => {
 
 
 // Get all clubs
-export const getClubs = async (req, res, next) => {
+export const getAllClubs = async (req, res, next) => {
   try {
-    res.json(await ClubModel.getAll());
+    const [clubs] = await db.query(`
+      SELECT 
+        c.*,
+        mentor.name as mentor_name,
+        mentor.email as mentor_email,
+        head.name as head_name,
+        head.email as head_email,
+        COALESCE(COUNT(DISTINCT ca.application_id), 0) + 1 as active_members
+      FROM club c
+      LEFT JOIN user mentor ON c.club_mentor_id = mentor.user_id
+      LEFT JOIN user head ON c.club_head_id = head.user_id
+      LEFT JOIN club_application ca ON c.club_id = ca.club_id AND ca.status = 'approved'
+      GROUP BY c.club_id
+    `);
+
+    res.json(clubs);
   } catch (err) {
     next(err);
   }
@@ -46,11 +64,16 @@ export const getClubById = async (req, res, next) => {
   try {
     const clubId = req.params.id;
     const [rows] = await db.query(
-      `SELECT c.club_id, c.name, c.description, c.tagline, c.category, c.activities, c.club_head_id,
-          u.name AS club_head_name
-   FROM club c
-   LEFT JOIN user u ON c.club_head_id = u.user_id
-   WHERE c.club_id = ?`,
+      `SELECT 
+          c.*,
+          mentor.name as mentor_name,
+          mentor.email as mentor_email,
+          head.name as head_name,
+          head.email as head_email
+       FROM club c
+       LEFT JOIN user mentor ON c.club_mentor_id = mentor.user_id
+       LEFT JOIN user head ON c.club_head_id = head.user_id
+       WHERE c.club_id = ?`,
       [clubId]
     );
 
@@ -76,8 +99,8 @@ export const updateClub = async (req, res, next) => {
 
     const club = rows[0];
 
-    // Permission check
-    if (req.user.role !== 4 && req.user.id !== club.club_head_id) {
+    // Permission check: Admin (4), Club Head, or Club Mentor
+    if (req.user.role !== 4 && req.user.id !== club.club_head_id && req.user.id !== club.club_mentor_id) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
@@ -150,7 +173,7 @@ export const addStudentToClub = async (req, res, next) => {
 
     // Check if student is already in the club
     const [exists] = await db.query(
-      "SELECT id FROM club_member WHERE club_id = ? AND student_id = ?",
+      "SELECT id FROM club_member WHERE club_id = ? AND user_id = ?",
       [clubId, studentId]
     );
 
@@ -160,7 +183,7 @@ export const addStudentToClub = async (req, res, next) => {
 
     // Insert student into club_member
     await db.query(
-      "INSERT INTO club_member (club_id, student_id, student_name, email, roll_no, year, branch) VALUES (?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO club_member (club_id, user_id, student_name, email, roll_no, year, branch) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [clubId, studentId, name, email, roll_no, year, branch]
     );
 
@@ -228,7 +251,7 @@ export const getClubMembers = async (req, res) => {
     const { clubId } = req.params;
 
     const [members] = await db.query(
-      `SELECT student_id, student_name, email, roll_no, year, branch
+      `SELECT user_id, student_name, email, roll_no, year, branch
        FROM club_member
        WHERE club_id = ?`,
       [clubId]
@@ -238,5 +261,44 @@ export const getClubMembers = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch members" });
+  }
+};
+
+// Toggle club registration status
+export const toggleRegistration = async (req, res, next) => {
+  try {
+    const { clubId } = req.params;
+    const { is_registration_open } = req.body;
+
+    // Check if user is club head
+    const [clubs] = await db.query(
+      "SELECT club_head_id FROM club WHERE club_id = ?",
+      [clubId]
+    );
+
+    if (!clubs.length) {
+      return res.status(404).json({ message: "Club not found" });
+    }
+
+    const club = clubs[0];
+
+    if (req.user.role !== 4 && req.user.id !== club.club_head_id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    // Update registration status
+    await ClubModel.updateRegistrationStatus(clubId, is_registration_open);
+
+    // If opening registration, notify interested users
+    if (is_registration_open) {
+      const { notifyInterestedUsers } = await import('./clubInterest.controller.js');
+      await notifyInterestedUsers(clubId);
+    }
+
+    res.json({
+      message: `Registration ${is_registration_open ? 'opened' : 'closed'} successfully`
+    });
+  } catch (err) {
+    next(err);
   }
 };

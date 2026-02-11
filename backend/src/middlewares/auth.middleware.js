@@ -19,10 +19,6 @@ export const authenticate = (req, res, next) => {
       id: decoded.id,
       role: Number(decoded.role_id) // ensure number, not string
     };
-    console.log("AUTH USER:", req.user);
-
-    // 🔍 TEMP DEBUG (REMOVE AFTER TESTING)
-    console.log("AUTH USER:", req.user);
 
     next();
   } catch (err) {

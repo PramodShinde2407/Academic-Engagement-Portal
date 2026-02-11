@@ -2,15 +2,49 @@
   padding: 30px;
 }
 
+/* Glassmorphism Dark Theme Card */
 .account-card {
-  background: #f8fafc;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: #fff;
+  transition: transform 0.2s;
+}
+
+.account-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .account-card h3 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #60a5fa;
+  /* Light Blue accent */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.account-card p {
   margin-bottom: 10px;
+  font-size: 1.05rem;
+  color: #e2e8f0;
+  /* Light Gray text */
+  line-height: 1.6;
+}
+
+.account-card p b {
+  color: #94a3b8;
+  /* Muted label color */
+  margin-right: 8px;
+  font-weight: 500;
 }
 
 /* Account Container */
@@ -29,6 +63,31 @@
   /* reduce space below header */
 }
 
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: -30px;
+}
+
+.my-clubs-btn {
+  padding: 8px 16px;
+  background-color: #60a5fa;
+  /* Blue */
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.my-clubs-btn:hover {
+  background-color: #3b82f6;
+  transform: scale(1.05);
+}
+
 .logout-btn {
   padding: 8px 16px;
   /* slightly smaller button */
@@ -42,12 +101,8 @@
   font-size: 0.95rem;
   /* slightly smaller */
   transition: all 0.3s ease;
-  margin-top: -30px;
-}
-
-.logout-btn:hover {
-  background-color: #d80000;
-  transform: scale(1.05);
+  margin-top: 0;
+  /* Remove negative margin as it's now flex item */
 }
 
 /* Confirm Toast */
@@ -101,7 +156,7 @@
   right: 30px;
   padding: 14px 18px;
   border-radius: 12px;
-background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
+  background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
   color: rgb(0, 0, 0);
   font-size: 14px;
   font-weight: 500;
@@ -134,7 +189,8 @@ background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
 /* Leave Club Button */
 .leave-club-btn {
   align-self: flex-end;
-  background-color: #f44336; /* red */
+  background-color: #f44336;
+  /* red */
   color: #fff;
   padding: 6px 12px;
   border: none;
@@ -150,6 +206,7 @@ background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
   background-color: #d7372f;
   transform: scale(1.05);
 }
+
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

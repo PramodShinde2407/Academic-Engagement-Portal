@@ -50,7 +50,7 @@ export const deleteEvent = async (req, res) => {
   }
 
   // 🔐 AUTH CHECK
-  if (event.organizer_id !== req.user.id) {
+  if (event.organizer_id !== req.user.id && req.user.role !== 4) {
     return res.status(403).json({ message: "Not allowed" });
   }
 
@@ -68,7 +68,7 @@ export const updateEvent = async (req, res) => {
   );
 
   if (!event) return res.status(404).json({ message: "Event not found" });
-  if (event.organizer_id !== req.user.id) return res.status(403).json({ message: "Not allowed" });
+  if (event.organizer_id !== req.user.id && req.user.role !== 4) return res.status(403).json({ message: "Not allowed" });
 
   await db.query(
     `UPDATE event 

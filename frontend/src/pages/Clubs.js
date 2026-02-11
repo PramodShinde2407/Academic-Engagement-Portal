@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 import ClubCard from "../components/ClubCard";
 import api from "../api/axios";
 import "./Clubs.css";
+import RegistrationModal from "../components/RegistrationModal";
 
 export default function Clubs() {
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newClubName, setNewClubName] = useState("");
   const [newClubDesc, setNewClubDesc] = useState("");
-  const [newClubKey, setNewClubKey] = useState(""); // admin-entered key
+  const [newClubKey, setNewClubKey] = useState("");
+  const [newClubMentorKey, setNewClubMentorKey] = useState("");
+
+  // Modal State
+  const [showModal, setShowModal] = useState(false);
+  const [selectedClub, setSelectedClub] = useState(null);
 
   const [toast, setToast] = useState(null);
   const [toastType, setToastType] = useState("success");
@@ -35,7 +41,7 @@ export default function Clubs() {
 
   const addClub = async () => {
     if (!newClubName || !newClubDesc || !newClubKey) {
-      setToastType("error ⚠️");
+      setToastType("error");
       setToast("Enter name, description, and secret key");
       setTimeout(() => setToast(null), 2500);
       return;
@@ -49,17 +55,19 @@ export default function Clubs() {
         {
           name: newClubName,
           description: newClubDesc,
-          secretKey: newClubKey // ✅ MATCH BACKEND
+          secretKey: newClubKey,
+          clubMentorKey: newClubMentorKey
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setToastType("success! 🎉");
+      setToastType("success");
       setToast("Club created successfully! Share the secret key with Club Head. 🎉");
 
       setNewClubName("");
       setNewClubDesc("");
       setNewClubKey("");
+      setNewClubMentorKey("");
       fetchClubs();
     } catch (err) {
       setToastType("error");
@@ -67,6 +75,11 @@ export default function Clubs() {
     } finally {
       setTimeout(() => setToast(null), 2500);
     }
+  };
+
+  const handleJoinClick = (club) => {
+    setSelectedClub(club);
+    setShowModal(true);
   };
 
   if (loading) return <p>Loading clubs...</p>;
@@ -97,9 +110,16 @@ export default function Clubs() {
 
             <input
               className="input-field"
-              placeholder="Secret Key (give to Club Head)"
+              placeholder="Club Head Key (for Club Head registration)"
               value={newClubKey}
               onChange={(e) => setNewClubKey(e.target.value)}
+            />
+
+            <input
+              className="input-field"
+              placeholder="Club Mentor Key (for Club Mentor registration)"
+              value={newClubMentorKey}
+              onChange={(e) => setNewClubMentorKey(e.target.value)}
             />
 
             <button className="add-club-btn" onClick={addClub}>
@@ -113,11 +133,32 @@ export default function Clubs() {
         ) : (
           <div className="clubs-grid">
             {clubs.map((c) => (
-              <ClubCard key={c.club_id} club={c} />
+              <ClubCard
+                key={c.club_id}
+                club={c}
+                onJoin={handleJoinClick}
+              />
             ))}
           </div>
         )}
       </div>
+
+      {showModal && selectedClub && (
+        <RegistrationModal
+          clubId={selectedClub.club_id}
+          clubName={selectedClub.name}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedClub(null);
+          }}
+          onSuccess={(msg) => {
+            setToastType("success");
+            setToast(msg);
+            setShowModal(false);
+            setTimeout(() => setToast(null), 3000);
+          }}
+        />
+      )}
 
       {toast && <div className={`toast ${toastType}`}>{toast}</div>}
     </>

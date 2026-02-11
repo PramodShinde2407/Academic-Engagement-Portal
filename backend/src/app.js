@@ -12,7 +12,14 @@ import eventRegistrationRoutes from "./routes/eventRegistration.routes.js"
 import volunteerRoutes from "./routes/volunteer.routes.js";
 import permissionRoutes from "./routes/permission.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
+import clubRegistrationRoutes from "./routes/clubRegistration.routes.js";
+import clubInterestRoutes from "./routes/clubInterest.routes.js";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const app = express();
@@ -21,6 +28,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:3000" }));
+
+/* Serve static files (uploaded photos) */
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 /* Health check */
 app.get("/", (req, res) => {
@@ -38,6 +48,8 @@ app.use("/api/event-registrations", eventRegistrationRoutes);
 app.use("/api/volunteers", volunteerRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/club-registrations", clubRegistrationRoutes);
+app.use("/api/club-interest", clubInterestRoutes);
 
 
 /* Error handler */

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ClubCard from "../components/ClubCard";
 import api from "../api/axios";
 import "./Account.css";
@@ -9,11 +9,15 @@ import EventCard from "../components/EventCard";
 export default function Account() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  const clubsRef = useRef(null);
+
+  const scrollToClubs = () => {
+    clubsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const [clubs, setClubs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [showConfirm, setShowConfirm] = useState(false); // logout
   const [toast, setToast] = useState(null);
 
   // 🔽 NEW STATES FOR LEAVE CLUB
@@ -22,7 +26,7 @@ export default function Account() {
   const [events, setEvents] = useState([]);
 
   // Roles that should only see profile info (no events/clubs)
-  const profileOnlyRoles = ["Club Mentor", "Estate Manager", "Principal", "Director"];
+  const profileOnlyRoles = ["Estate Manager", "Principal", "Director"];
   const isProfileOnly = profileOnlyRoles.includes(user?.role_name);
 
   useEffect(() => {
@@ -49,17 +53,6 @@ export default function Account() {
     }
   };
 
-  // 🔹 LOGOUT
-  const confirmLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    setShowConfirm(false);
-    setToast("Logged out successfully ✔️");
-    setTimeout(() => {
-      setToast(null);
-      navigate("/");
-    }, 1200);
-  };
 
   // 🔹 OPEN LEAVE CLUB TOAST
   const askLeaveClub = (club) => {
@@ -106,11 +99,16 @@ export default function Account() {
     <>
       <div className="account-container">
         {/* Header */}
+
         <div className="account-header">
           <h2>My Account</h2>
-          <button className="logout-btn" onClick={() => setShowConfirm(true)}>
-            Logout
-          </button>
+          <div className="header-actions">
+            {!isProfileOnly && (
+              <button className="my-clubs-btn" onClick={scrollToClubs}>
+                My Clubs
+              </button>
+            )}
+          </div>
         </div>
 
         {/* User Info */}
@@ -144,8 +142,8 @@ export default function Account() {
 
         {/* Clubs - Only show for non-profile-only roles */}
         {!isProfileOnly && (
-          <div className="account-card">
-            <h3>Clubs Membership</h3>
+          <div className="account-card" ref={clubsRef}>
+            <h3>My Clubs</h3>
             {clubs.length === 0 ? (
               <p>You are not a member of any clubs yet.</p>
             ) : (
@@ -153,12 +151,15 @@ export default function Account() {
                 {clubs.map((c) => (
                   <div key={c.club_id} className="club-card-wrapper">
                     <ClubCard club={c} />
-                    <button
-                      className="leave-club-btn"
-                      onClick={() => askLeaveClub(c)}
-                    >
-                      Leave Club
-                    </button>
+                    {/* Hide Leave button for Head/Mentor */}
+                    {user?.id !== c.club_head_id && user?.id !== c.club_mentor_id && (
+                      <button
+                        className="leave-club-btn"
+                        onClick={() => askLeaveClub(c)}
+                      >
+                        Leave Club
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -167,16 +168,6 @@ export default function Account() {
         )}
       </div>
 
-      {/* 🔴 LOGOUT CONFIRM */}
-      {showConfirm && (
-        <div className="confirm-toast">
-          <p>Do you want to logout?</p>
-          <div className="confirm-actions">
-            <button className="yes-btn" onClick={confirmLogout}>Yes</button>
-            <button className="no-btn" onClick={() => setShowConfirm(false)}>No</button>
-          </div>
-        </div>
-      )}
 
       {/* 🔴 LEAVE CLUB CONFIRM */}
       {showLeaveConfirm && (

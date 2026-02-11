@@ -1,22 +1,108 @@
+/* Dark Glassmorphism Create Event Form */
+
+form {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 32px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto 32px auto;
+  font-family: 'Inter', sans-serif;
+}
+
+form h2 {
+  margin-bottom: 24px;
+  font-size: 1.8rem;
+  color: #00ffff;
+  font-family: 'Outfit', sans-serif;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1rem;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+form input::placeholder,
+form textarea::placeholder {
+  color: #94a3b8;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  border-color: #00ffff;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+form button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 10px;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+  filter: brightness(1.1);
+}
+
+/* ===========================
+   TOAST MESSAGE - Dark Mode
+=========================== */
+
 .toast {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  padding: 14px 18px;
+  padding: 16px 24px;
   border-radius: 12px;
-  font-size: 14px;
+  color: #fff;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: #ffffff;
-  animation: slideUp 0.4s ease;
   z-index: 9999;
+  animation: slideUp 0.4s ease;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .toast.success {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-left: 4px solid #00ff00;
 }
 
 .toast.error {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-left: 4px solid #ff0055;
 }
 
 @keyframes slideUp {
@@ -24,116 +110,9 @@
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* ===========================
-   CREATE EVENT FORM
-=========================== */
-
-form {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
-  margin-bottom: 25px;
-}
-
-form h2 {
-  margin-bottom: 18px;
-  font-size: 22px;
-  color: #1f2937;
-}
-
-form input {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 14px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  font-size: 15px;
-  outline: none;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
-}
-
-form input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-form button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-form button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
-}
-
-/* ===========================
-   TOAST MESSAGE
-=========================== */
-
-.toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 999;
-  animation: fadeIn 0.3s ease;
-}
-
-.toast.success {
-  background: #16a34a;
-}
-
-.toast.error {
-  background: #dc2626;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-form {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
-  width: 100%;
-  margin: 0 auto 25px auto;
-}
-form input {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 14px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  font-size: 15px;
-  outline: none;
-  box-sizing: border-box; /* 🔥 extra safety */
 }

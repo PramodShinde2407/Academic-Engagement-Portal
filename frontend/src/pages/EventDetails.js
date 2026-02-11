@@ -43,7 +43,7 @@ export default function EventDetails() {
 
   if (!event || !user) return <p>Loading Events/Sessions...</p>;
 
-  const isCreator = user.id === event.organizer_id;
+  const canManageEvent = user.id === event.organizer_id || user.role_name === "Admin" || user.role_id === 4;
 
   // Handle input changes in edit form
   const handleChange = (e) => {
@@ -101,7 +101,7 @@ export default function EventDetails() {
           <p><b>Additional Info:</b> {event.additional_info || "N/A"}</p>
           <p><b>Conducted By:</b> {event.conducted_by || "N/A"}</p>
 
-          {isCreator && (
+          {canManageEvent && (
             <div className="event-buttons">
               <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Event/Session Details</button>
               <button

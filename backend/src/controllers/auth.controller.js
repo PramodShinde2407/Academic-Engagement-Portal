@@ -46,14 +46,15 @@ export const register = async (req, res, next) => {
       }
     }
 
+
     // === Club Mentor Key validation ===
     else if (role[0].role_name === "Club Mentor") {
-      const [mentorKeyRow] = await db.query(
-        "SELECT * FROM club_mentor_key WHERE key_value = ?",
-        [secret_key]
-      );
-      if (!mentorKeyRow.length) {
+      const club = await ClubModel.getByMentorKey(secret_key);
+      if (!club) {
         return res.status(400).json({ message: "Invalid Club Mentor Key" });
+      }
+      if (club.club_mentor_id) {
+        return res.status(400).json({ message: "This Club Mentor Key has already been used" });
       }
     }
 
@@ -109,6 +110,29 @@ export const register = async (req, res, next) => {
     // assign club_head_id if Club Head
     if (role[0].role_name === "Club Head") {
       await db.query("UPDATE club SET club_head_id = ? WHERE secret_key = ?", [userId, secret_key]);
+
+      // Auto-join as member
+      const [clubRow] = await db.query("SELECT club_id FROM club WHERE secret_key = ?", [secret_key]);
+      if (clubRow.length) {
+        await db.query(
+          "INSERT INTO club_member (club_id, user_id, student_name, email, year, branch) VALUES (?, ?, ?, ?, ?, ?)",
+          [clubRow[0].club_id, userId, name, email, year, department]
+        );
+      }
+    }
+
+    // assign club_mentor_id if Club Mentor
+    if (role[0].role_name === "Club Mentor") {
+      await db.query("UPDATE club SET club_mentor_id = ? WHERE club_mentor_key = ?", [userId, secret_key]);
+
+      // Auto-join as member
+      const [clubRow] = await db.query("SELECT club_id FROM club WHERE club_mentor_key = ?", [secret_key]);
+      if (clubRow.length) {
+        await db.query(
+          "INSERT INTO club_member (club_id, user_id, student_name, email, year, branch) VALUES (?, ?, ?, ?, ?, ?)",
+          [clubRow[0].club_id, userId, name, email, year, department]
+        );
+      }
     }
 
     res.json({ message: "Registered successfully" });
@@ -122,16 +146,20 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log(`Login attempt for: ${email}`);
 
     const user = await UserModel.findByEmail(email);
     if (!user) {
+      console.log(`User not found: ${email}`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await comparePassword(password, user.password_hash);
     if (!isMatch) {
+      console.log(`Password mismatch for: ${email}`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
+    console.log(`Login successful for: ${email}`);
 
     const token = signToken({
       id: user.user_id,

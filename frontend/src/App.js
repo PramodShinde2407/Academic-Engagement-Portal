@@ -7,7 +7,7 @@ import Register from "./auth/Register";
 import AdminCreateEvent from "./pages/AdminCreateEvent";
 import EventPage from "./pages/Events";
 import EventRegisterPage from "./pages/EventRegisterPage";
-import ClubJoinPage from "./pages/ClubJoinPage";
+
 import ClubsPage from "./pages/Clubs";
 import Account from "./pages/Account"
 import HomePage from "./pages/HomePage";
@@ -19,6 +19,7 @@ import Contact from "./pages/Contact";
 import PermissionRequestForm from "./components/PermissionRequestForm";
 import MyRequestsList from "./components/MyRequestsList";
 import ApprovalDashboard from "./components/ApprovalDashboard";
+import ClubApplications from "./pages/ClubApplications";
 
 function App() {
   return (
@@ -36,8 +37,9 @@ function App() {
         <Route path="/my-requests" element={<MyRequestsList />} />
         <Route path="/approvals" element={<ApprovalDashboard />} />
         <Route path="/clubs" element={<ClubsPage />} />
-        <Route path="/clubs/join/:id" element={<ClubJoinPageWrapper />} />
-        <Route path="/clubs/:clubId" element={<ClubDetails />} /> {/* dynamic route */}
+
+        <Route path="/clubs/:clubId" element={<ClubDetails />} />
+        <Route path="/clubs/:clubId/applications" element={<ClubApplications />} />
         <Route path="/account" element={<Account />} />
         <Route path="/events" element={<EventPage />} />
         <Route path="/events/:eventId" element={<EventDetails />} /> {/* dynamic */}
@@ -50,10 +52,10 @@ function App() {
 }
 
 
-function ClubJoinPageWrapper() {
-  const location = useLocation();
-  const clubName = location.state?.clubName || "Club";
-  return <ClubJoinPage clubName={clubName} />;
-}
+// function ClubJoinPageWrapper() {
+//   const location = useLocation();
+//   const clubName = location.state?.clubName || "Club";
+//   return <ClubJoinPage clubName={clubName} />;
+// }
 
 export default App;

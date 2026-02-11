@@ -1,79 +1,61 @@
-import mysql from 'mysql2/promise';
-import bcrypt from 'bcrypt';
+import { db } from "./src/config/db.js";
+import { UserModel } from "./src/models/user.model.js";
+import { hashPassword, comparePassword } from "./src/utils/password.js";
 
-async function diagnoseLogin() {
-    console.log('🔍 Login Diagnostic Tool\n');
-    console.log('='.repeat(70));
-
+async function diagnose() {
     try {
-        const conn = await mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'pict@123',
-            database: 'college_db'
-        });
+        console.log("=== DIAGNOSING LOGIN ISSUES ===");
 
-        // Get all users
-        const [users] = await conn.query(`
-            SELECT u.user_id, u.name, u.email, u.password_hash, 
-                   LENGTH(u.password_hash) as hash_length, r.role_name
-            FROM user u
-            JOIN role r ON u.role_id = r.role_id
-            ORDER BY u.user_id
-        `);
+        // 1. Check Roles
+        const [roles] = await db.query("SELECT * FROM role");
+        console.log("\n--- ROLES ---");
+        console.table(roles);
 
-        console.log(`\n📊 Found ${users.length} registered users:\n`);
+        // 2. Check Users
+        const [users] = await db.query("SELECT user_id, name, email, role_id, password_hash FROM user");
+        console.log("\n--- USERS ---");
+        // Don't print full hash to keep output clean, just first few chars
+        const safeUsers = users.map(u => ({ ...u, password_hash: u.password_hash.substring(0, 10) + '...' }));
+        console.table(safeUsers);
 
-        users.forEach((user, index) => {
-            console.log(`${index + 1}. ${user.name}`);
-            console.log(`   Email: ${user.email}`);
-            console.log(`   Role: ${user.role_name}`);
-            console.log(`   Hash Length: ${user.hash_length} (should be 60 for bcrypt)`);
+        // 3. Test findByEmail for the first user
+        if (users.length > 0) {
+            const testEmail = users[0].email;
+            console.log(`\n--- TESTING FindByEmail for: ${testEmail} ---`);
 
-            if (user.hash_length !== 60) {
-                console.log(`   ⚠️  WARNING: Hash length is incorrect! Should be 60.`);
-                console.log(`   This user cannot login until password is reset.`);
+            const userWithRole = await UserModel.findByEmail(testEmail);
+            console.log("Result:", userWithRole);
+
+            if (!userWithRole) {
+                console.error("❌ findByEmail returned NULL! usage of JOIN likely failed.");
+                console.log(`Check if role_id ${users[0].role_id} exists in 'role' table.`);
+            } else {
+                console.log("✅ findByEmail working correctly.");
             }
-            console.log('');
-        });
-
-        console.log('='.repeat(70));
-        console.log('\n💡 TROUBLESHOOTING STEPS:\n');
-
-        console.log('1. Make sure backend server is running:');
-        console.log('   cd backend');
-        console.log('   npm run dev\n');
-
-        console.log('2. Use the EXACT password you used during registration\n');
-
-        console.log('3. If you forgot the password, you can reset it:');
-        console.log('   - Delete the user from database');
-        console.log('   - Register again with a new password\n');
-
-        console.log('4. To delete a user (replace email):');
-        console.log('   DELETE FROM user WHERE email = \'your@email.com\';\n');
-
-        // Check if any hash is invalid
-        const invalidUsers = users.filter(u => u.hash_length !== 60);
-        if (invalidUsers.length > 0) {
-            console.log('⚠️  CRITICAL: Found users with invalid password hashes!');
-            console.log('   These users need to be deleted and re-registered:\n');
-            invalidUsers.forEach(u => {
-                console.log(`   DELETE FROM user WHERE email = '${u.email}';`);
-            });
-            console.log('');
+        } else {
+            console.log("\n⚠ No users found in database.");
         }
 
-        await conn.end();
+        // 4. Test Password Hashing & Verification
+        console.log("\n--- TESTING PASSWORD VERIFICATION ---");
+        const testPlain = "password123";
+        const testHash = await hashPassword(testPlain);
+        console.log(`Generated hash for '${testPlain}': ${testHash}`);
 
+        const isMatch = await comparePassword(testPlain, testHash);
+        console.log(`Comparison result: ${isMatch}`);
+
+        if (isMatch) {
+            console.log("✅ Password hashing and comparison logic is working.");
+        } else {
+            console.error("❌ Password comparison FAILED internally.");
+        }
+
+        process.exit();
     } catch (err) {
-        console.log('\n❌ Error:', err.message);
-        if (err.code === 'ECONNREFUSED') {
-            console.log('\n💡 Cannot connect to database. Check:');
-            console.log('   - MySQL is running');
-            console.log('   - Credentials in .env are correct');
-        }
+        console.error("Diagnosis failed:", err);
+        process.exit(1);
     }
 }
 
-diagnoseLogin();
+diagnose();

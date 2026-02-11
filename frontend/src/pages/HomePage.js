@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import "./HomePage.css";
-import Footer from "../components/Footer"; // adjust path
+import Footer from "../components/Footer";
 
 export default function HomePage() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [clubs, setClubs] = useState([]);
     const [events, setEvents] = useState([]);
-    const [toast, setToast] = useState(null); // toast message
-    const [toastType, setToastType] = useState("success"); // success/error
+    const [toast, setToast] = useState(null);
+    const [toastType, setToastType] = useState("success");
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -18,16 +18,35 @@ export default function HomePage() {
 
         // Fetch clubs from backend (only 3)
         api.get("/clubs")
-            .then(res => setClubs(res.data.slice(0, 3))) // only first 3 clubs
+            .then(res => setClubs(res.data.slice(0, 3)))
             .catch(err => console.error(err));
 
         // Fetch events from backend (only 3)
         api.get("/events")
-            .then(res => setEvents(res.data.slice(0, 3))) // only first 3 events
+            .then(res => setEvents(res.data.slice(0, 3)))
             .catch(err => console.error(err));
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        const fadeElements = document.querySelectorAll('.fade-in-up');
+        fadeElements.forEach(el => observer.observe(el));
+
+        return () => observer.disconnect();
     }, []);
 
-    // function to show toast
     const showToast = (message, type = "success") => {
         setToast(message);
         setToastType(type);
@@ -36,207 +55,236 @@ export default function HomePage() {
 
     return (
         <div className="home-container">
-            {/* Welcome Section */}
-            <section className="welcome-section">
-                <div className="welcome-card">
-                    <h1>Hello {user ? user.name : "PICTian"}!</h1>
-                    <p>
-                        Welcome to <strong>PICT Portal</strong>! 🎉
-                        <br />
-                        We know stepping into college can be exciting but also a little overwhelming.
-                        You might be wondering: which clubs should I join? Which events/sessions are worth attending?
-                        How do I make the most of your college journey? Don’t worry—we’re here to help!
+            {/* HERO SECTION - Split Screen 50/50 */}
+            <section className="hero-section">
+                <div className="hero-content fade-in-up">
+                    <h1 className="hero-headline">
+                        Your Campus. Your Community. Connected.
+                    </h1>
+                    <p className="hero-subheadline">
+                        Manage clubs, track events, and unlock your engineering potential in one seamless portal.
                     </p>
+                    <div className="cta-buttons">
+                        <button
+                            className="cta-btn cta-btn-primary"
+                            onClick={() => navigate("/events")}
+                        >
+                            Explore Events
+                        </button>
+                        <button
+                            className="cta-btn cta-btn-secondary"
+                            onClick={() => navigate("/clubs")}
+                        >
+                            View Clubs
+                        </button>
+                    </div>
+                </div>
 
-                    <h3>Challenges new engineering students face:</h3>
-                    <ul>
-                        <li>Figuring out which clubs and societies match your interests</li>
-                        <li>Keeping track of academic deadlines and events/sessions</li>
-                        <li>Finding your peer group and navigating campus life</li>
-                        <li>Choosing workshops, competitions, or seminars that help your career</li>
-                    </ul>
-
-                    <h3>How PICT Portal helps:</h3>
-                    <ul>
-                        <li>Discover and join clubs that match your passion and skills</li>
-                        <li>See upcoming events/sessions, both technical and non-technical, and participate</li>
-                        <li>Track your activities and manage your account from one place</li>
-                        <li>Learn about our college culture and explore opportunities at your own pace</li>
-                    </ul>
-
-                    <p>
-                        Take your first steps here, explore, join, and grow. Scroll down to find clubs and events/sessions
-                        that can make your college life amazing! 🚀
-                    </p>
+                <div className="hero-visual fade-in-up">
+                    <div className="glowing-orb"></div>
+                    <div className="orb-ring orb-ring-1"></div>
+                    <div className="orb-ring orb-ring-2"></div>
+                    <div className="orb-ring orb-ring-3"></div>
                 </div>
             </section>
 
-            {/* Clubs Section */}
-            <section className="clubs-section">
-                <h2>Our Clubs</h2>
+            {/* PROCESS STEPS SECTION - Horizontal Flow */}
+            <section className="process-section fade-in-up">
+                <h2 className="section-title">How It Works</h2>
+                <div className="process-steps">
+                    <div className="process-step">
+                        <div className="process-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <h3 className="process-label">Discover</h3>
+                        <p className="process-description">Browse clubs and events</p>
+                    </div>
 
-                {/* Club Cards */}
+                    <div className="process-step">
+                        <div className="process-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h3 className="process-label">Register</h3>
+                        <p className="process-description">Join with one click</p>
+                    </div>
+
+                    <div className="process-step">
+                        <div className="process-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <polyline points="13 2 13 9 20 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 className="process-label">Participate</h3>
+                        <p className="process-description">Engage and grow</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* FEATURES SECTION - Zig-Zag Layout */}
+            <section className="features-section">
+                <div className="feature-row fade-in-up">
+                    <div className="feature-text">
+                        <h3>Find Your Tribe</h3>
+                        <p>
+                            Connect with like-minded students through clubs that match your passions.
+                            From coding to robotics, cultural to sports—discover communities that inspire you.
+                        </p>
+                    </div>
+                    <div className="feature-visual">
+                        <div className="feature-icon">👥</div>
+                    </div>
+                </div>
+
+                <div className="feature-row feature-row-reverse fade-in-up">
+                    <div className="feature-visual">
+                        <div className="feature-icon">📅</div>
+                    </div>
+                    <div className="feature-text">
+                        <h3>Never Miss a Deadline</h3>
+                        <p>
+                            Stay on top of every workshop, competition, and seminar. Get real-time updates
+                            and manage your academic calendar effortlessly.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="feature-row fade-in-up">
+                    <div className="feature-text">
+                        <h3>Track Your Journey</h3>
+                        <p>
+                            Monitor your club memberships, event registrations, and achievements all in one place.
+                            Build your college portfolio seamlessly.
+                        </p>
+                    </div>
+                    <div className="feature-visual">
+                        <div className="feature-icon">🚀</div>
+                    </div>
+                </div>
+            </section>
+
+            {/* CLUBS SECTION - Enhanced Cards */}
+            <section className="clubs-section fade-in-up">
+                <h2 className="section-title">Featured Clubs</h2>
+
                 <div className="cards-container">
                     {clubs.length > 0 ? (
                         clubs.map(club => (
                             <div key={club.club_id} className="card">
-                                <h3>{club.name}</h3>
-                                <p>{club.description}</p>
-                                <button onClick={() => navigate(`/clubs/${club.club_id}`)}>
-                                    Visit Club
-                                </button>
-                                {user ? (
+                                <div className="card-content">
+                                    <h3>{club.name}</h3>
+                                    <p>{club.description}</p>
+                                </div>
+                                <div className="card-actions">
                                     <button
-                                        className="join-btn"
-                                        onClick={() => navigate(`/clubs/join/${club.club_id}`)}
+                                        className="card-btn card-btn-secondary"
+                                        onClick={() => navigate(`/clubs/${club.club_id}`)}
                                     >
-                                        Join Club
+                                        Visit Club
                                     </button>
-                                ) : (
-                                    <button
-                                        className="login-required-btn"
-                                        onClick={() => {
-                                            showToast("Please login or signup to join clubs", "error");
-                                            setTimeout(() => navigate("/login"), 1500);
-                                        }}
-                                    >
-                                        Login to Join
-                                    </button>
-                                )}
+                                    {user ? (
+                                        <button
+                                            className="card-btn card-btn-primary"
+                                            onClick={() => navigate(`/clubs/join/${club.club_id}`)}
+                                        >
+                                            Join Club
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="card-btn card-btn-warning"
+                                            onClick={() => {
+                                                showToast("Please login or signup to join clubs", "error");
+                                                setTimeout(() => navigate("/login"), 1500);
+                                            }}
+                                        >
+                                            Login to Join
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         ))
                     ) : (
-                        <p>No clubs available currently.</p>
+                        <p className="empty-state">No clubs available currently.</p>
                     )}
                 </div>
 
-                {/* Guide for New Users */}
-                <div className="clubs-guide">
-                    <h3>How to Join a Club as a New User:</h3>
-                    <ol>
-                        <li>Browse the clubs above and pick the ones that interest you.</li>
-                        <li>
-                            Click the <strong>"Visit Club"</strong> button to see detailed
-                            information about that club.
-                        </li>
-                        <li>
-                            To become a member, click the <strong>"Join Club"</strong> button.
-                            You will see a form pop up where you need to fill in basic details:
-                        </li>
-                        <ul>
-                            <li>Full Name</li>
-                            <li>Email Address</li>
-                            <li>Year & Department</li>
-                            <li>Why you want to join this club (optional)</li>
-                        </ul>
-                        <li>Submit the form — your request will be registered and you will be notified.</li>
-                        <li>
-                            Once accepted, you can participate in events/sessions, meetings, and activities of the club.
-                        </li>
-                    </ol>
-
-                    <p>
-                        This guide ensures that even if you’re new, you can quickly become part
-                        of the right clubs and make the most of your college experience! 🚀
-                    </p>
-                    {/* Discover More clubs Button */}
-                    <div style={{ textAlign: "center", margin: "30px 0" }}>
-                        <button
-                            className="discover-btn"
-                            onClick={() => navigate("/clubs")}
-                        >
-                            Discover More Clubs
-                        </button>
-                    </div>
+                <div className="section-cta">
+                    <button
+                        className="discover-btn"
+                        onClick={() => navigate("/clubs")}
+                    >
+                        Discover All Clubs
+                    </button>
                 </div>
-
             </section>
 
-            {/* Events Section */}
-            <section className="events-section">
-                <h2>Upcoming Events/Sessions</h2>
+            {/* EVENTS SECTION - Enhanced Cards */}
+            <section className="events-section fade-in-up">
+                <h2 className="section-title">Upcoming Events</h2>
 
-                {/* Event Cards */}
                 <div className="cards-container">
                     {events.length > 0 ? (
                         events.map(event => (
                             <div key={event.event_id} className="card">
-                                <h3>{event.title}</h3>
-                                <p>{event.description}</p>
-                                <p>
-                                    <strong>Date:</strong> {new Date(event.date).toLocaleDateString()} <br />
-                                    <strong>Venue:</strong> {event.venue} <br />
-                                    <strong>Status:</strong> {event.status}
-                                </p>
-                                <button onClick={() => navigate(`/events/${event.event_id}`)}>
-                                    View Event/Session
-                                </button>
-                                {user ? (
+                                <div className="card-content">
+                                    <h3>{event.title}</h3>
+                                    <p>{event.description}</p>
+                                    <div className="event-meta">
+                                        <span className="meta-item">
+                                            📅 {new Date(event.date).toLocaleDateString()}
+                                        </span>
+                                        <span className="meta-item">
+                                            📍 {event.venue}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="card-actions">
                                     <button
-                                        className="join-btn"
-                                        onClick={() => {
-                                            navigate(`/events/${event.event_id}/register`);
-                                        }}
+                                        className="card-btn card-btn-secondary"
+                                        onClick={() => navigate(`/events/${event.event_id}`)}
                                     >
-                                        Join Event/Session
+                                        View Details
                                     </button>
-                                ) : (
-                                    <button
-                                        className="login-required-btn"
-                                        onClick={() => {
-                                            showToast("Please login or signup to register for events", "error");
-                                            setTimeout(() => navigate("/login"), 1500);
-                                        }}
-                                    >
-                                        Login to Register
-                                    </button>
-                                )}
+                                    {user ? (
+                                        <button
+                                            className="card-btn card-btn-primary"
+                                            onClick={() => navigate(`/events/${event.event_id}/register`)}
+                                        >
+                                            Register Now
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="card-btn card-btn-warning"
+                                            onClick={() => {
+                                                showToast("Please login or signup to register for events", "error");
+                                                setTimeout(() => navigate("/login"), 1500);
+                                            }}
+                                        >
+                                            Login to Register
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         ))
                     ) : (
-                        <p>No Events/Sessions scheduled currently.</p>
+                        <p className="empty-state">No events scheduled currently.</p>
                     )}
                 </div>
 
-                {/* Events Guide for New Users */}
-                <div className="events-guide">
-                    <h3>How to Participate in Events/Sessions:</h3>
-                    <ol>
-                        <li>Browse the upcoming events/sessions above to see what interests you.</li>
-                        <li>
-                            Click <strong>"View Event/Session"</strong> to see full details: venue, timings, and description.
-                        </li>
-                        <li>
-                            If you want to participate, click the <strong>"Join Event/Session"</strong> button.
-                            A registration form will appear where you need to provide:
-                        </li>
-                        <ul>
-                            <li>Full Name</li>
-                            <li>Email Address</li>
-                            <li>Year & Department</li>
-                            <li>Any other event/session-specific info (if required)</li>
-                        </ul>
-                        <li>Submit the form to confirm your participation.</li>
-                        <li>
-                            You will receive a confirmation and can now attend the event/session. Remember to check your account for updates and reminders.
-                        </li>
-                    </ol>
-
-                    <p>
-                        By following these steps, you’ll never miss an event/session and can make the most of your college life. 🌟
-                    </p>
-
-                    {/* Discover More Events Button */}
-                    <div style={{ textAlign: "center", margin: "30px 0" }}>
-                        <button
-                            className="discover-btn"
-                            onClick={() => navigate("/events")}
-                        >
-                            Discover More Events/Sessions
-                        </button>
-                    </div>
+                <div className="section-cta">
+                    <button
+                        className="discover-btn"
+                        onClick={() => navigate("/events")}
+                    >
+                        Discover All Events
+                    </button>
                 </div>
-
             </section>
 
             <Footer />

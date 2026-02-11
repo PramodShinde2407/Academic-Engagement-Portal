@@ -1,56 +1,254 @@
-/* Navbar container */
+/* Modern SaaS Navbar - Three Section Layout */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 25px;
-  background-color: #004080; /* college blue */
-  color: white;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px 40px;
+  background: rgba(5, 5, 5, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-white);
+  font-family: var(--font-futuristic);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
 }
 
-/* Left side: circle + title */
+/* =========================
+   LEFT SECTION - Logo
+========================= */
 .nav-left {
   display: flex;
   align-items: center;
-  gap: 20px; /* small gap between circle and title */
+  gap: 16px;
+  flex: 0 0 auto;
 }
 
-/* Portal title */
 .portal-title {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-futuristic);
+  color: var(--text-white);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--text-white), var(--electric-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Right side links */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 30px; /* space between links */
-}
-
-/* Links style */
-.nav-right a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.nav-right a:hover {
-  text-decoration: underline;
-}
-
-/* Profile circle */
 .profile-circle {
-  width: 38px;
-  height: 38px;
-  background-color: #c6c6c6; /* green */
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--electric-cyan), var(--neon-purple));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  color: #0f172a; /* dark text inside */
+  color: var(--deep-space-black);
+  transition: all 0.3s ease;
+  box-shadow: var(--glow-cyan);
+  border: 2px solid var(--electric-cyan);
+}
+
+.profile-circle:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: var(--glow-cyan-intense);
+}
+
+/* =========================
+   CENTER SECTION - Navigation Links (Pill Buttons)
+========================= */
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  /* Pill-shaped outlined button */
+  padding: 10px 28px;
+  border-radius: 9999px;
+  border: 1px solid #06b6d4;
+  background: rgba(6, 182, 212, 0.05);
+  color: #06b6d4;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: var(--font-futuristic);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  display: inline-block;
+}
+
+/* Hover state - Faint fill effect */
+.nav-link:hover {
+  background: rgba(6, 182, 212, 0.2);
+  color: #22D3EE;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  transform: translateY(-2px);
+  border-color: #22D3EE;
+}
+
+/* Active state - Dark solid fill */
+.nav-link.active {
+  background: #06b6d4;
+  color: #000000;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  border-color: #06b6d4;
+}
+
+/* Active state hover - Keep it dark */
+.nav-link.active:hover {
+  background: #22D3EE;
+  color: #000000;
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.8);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   RIGHT SECTION - Auth Buttons
+========================= */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 0 0 auto;
+}
+
+.auth-btn {
+  padding: 10px 28px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: var(--font-futuristic);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: 2px solid;
+  display: inline-block;
+}
+
+/* Login Button - Ghost Style */
+.auth-btn-login {
+  background: transparent;
+  border-color: var(--text-white);
+  color: var(--text-white);
+}
+
+.auth-btn-login:hover {
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border-color: #7c3aed;
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Signup Button - Solid Gradient (Purple to Pink) */
+.auth-btn-signup {
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  border-color: #7c3aed;
+  color: var(--text-white);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+}
+
+.auth-btn-signup:hover {
+  background: linear-gradient(135deg, #8b5cf6, #f472b6);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.8), 0 0 60px rgba(236, 72, 153, 0.4);
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+/* Logout Button - Red Border/Text style */
+.logout-btn {
+  background: transparent;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  border-color: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 1024px) {
+  .nav-center {
+    position: static;
+    transform: none;
+    gap: 24px;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .nav-center {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 20px;
+  }
+
+  .nav-center {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+  }
+
+  .portal-title {
+    font-size: 1rem;
+  }
+
+  .profile-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .auth-btn {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-right {
+    width: 100%;
+    order: 4;
+    justify-content: center;
+  }
+
+  .auth-btn {
+    flex: 1;
+  }
 }

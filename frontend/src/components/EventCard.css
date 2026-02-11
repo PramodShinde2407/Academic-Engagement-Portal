@@ -3,13 +3,13 @@
   border-radius: 12px;
   padding: 20px;
   background: #f8f9fa;
-  box-shadow: 3px 3px 12px rgba(0,0,0,0.1);
+  box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .event-card:hover {
   transform: translateY(-5px);
-  box-shadow: 5px 5px 18px rgba(0,0,0,0.15);
+  box-shadow: 5px 5px 18px rgba(0, 0, 0, 0.15);
 }
 
 .event-card h3 {
@@ -51,7 +51,7 @@
   padding: 25px 20px;
   border-radius: 15px;
   width: 320px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,7 +61,7 @@
 
 .event-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .event-info {
@@ -108,6 +108,7 @@
   background-color: #002d5b !important;
   transform: scale(1.05);
 }
+
 /* 🔵 FORCE Details button to stay BLUE */
 .event-buttons .details-btn {
   background-color: #005ab5 !important;
@@ -150,6 +151,7 @@
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -160,8 +162,10 @@
    REGISTER BUTTON STYLING
 =========================== */
 .register-btn {
-  background-color: #22c55e !important; /* green */
-  color: #0f172a; /* black text */
+  background-color: #22c55e !important;
+  /* green */
+  color: #0f172a;
+  /* black text */
   font-weight: 600;
   border-radius: 8px;
   padding: 10px 18px;
@@ -170,7 +174,22 @@
 }
 
 .register-btn:hover {
-  background-color: #00b141 !important; /* darker green on hover */
+  background-color: #00b141 !important;
+  /* darker green on hover */
   transform: scale(1.05);
   box-shadow: 0 5px 15px rgba(22, 163, 74, 0.3);
+}
+
+.organizer-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  align-self: flex-start;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }

@@ -73,3 +73,35 @@ export const markAllAsRead = async (req, res, next) => {
         next(err);
     }
 };
+
+/**
+ * Get all notifications for club system
+ */
+export const getAllNotifications = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const notifications = await NotificationModel.getAllByUser(userId);
+
+        res.json(notifications);
+    } catch (err) {
+        next(err);
+    }
+};
+
+/**
+ * Mark notification as read (club system)
+ */
+export const markNotificationRead = async (req, res, next) => {
+    try {
+        const notificationId = req.params.id;
+        const success = await NotificationModel.markRead(notificationId);
+
+        if (!success) {
+            return res.status(404).json({ message: "Notification not found" });
+        }
+
+        res.json({ message: "Notification marked as read" });
+    } catch (err) {
+        next(err);
+    }
+};

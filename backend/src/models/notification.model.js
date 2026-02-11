@@ -2,7 +2,7 @@ import { db } from "../config/db.js";
 
 export const NotificationModel = {
     /**
-     * Create a new notification
+     * Create a new notification (legacy - for permission system)
      */
     create: async (userId, requestId, message, type = 'approval_needed') => {
         const [result] = await db.query(
@@ -13,6 +13,49 @@ export const NotificationModel = {
         );
 
         return result.insertId;
+    },
+
+    /**
+     * Create a new notification (for club registration system)
+     */
+    createNotification: async ({ user_id, title, message, type = 'GENERAL', link = null }) => {
+        const [result] = await db.query(
+            `INSERT INTO notification 
+       (user_id, title, message, type, link)
+       VALUES (?, ?, ?, ?, ?)`,
+            [user_id, title, message, type, link]
+        );
+
+        return result.insertId;
+    },
+
+    /**
+     * Get all notifications for a user (club system)
+     */
+    getAllByUser: async (userId, limit = 50) => {
+        const [rows] = await db.query(
+            `SELECT * FROM notification
+       WHERE user_id = ?
+       ORDER BY created_at DESC
+       LIMIT ?`,
+            [userId, limit]
+        );
+
+        return rows;
+    },
+
+    /**
+     * Mark notification as read (club system)
+     */
+    markRead: async (notificationId) => {
+        const [result] = await db.query(
+            `UPDATE notification 
+       SET is_read = TRUE 
+       WHERE notification_id = ?`,
+            [notificationId]
+        );
+
+        return result.affectedRows > 0;
     },
 
     /**

@@ -4,7 +4,9 @@ import {
     getUnreadNotifications,
     getUnreadCount,
     markAsRead,
-    markAllAsRead
+    markAllAsRead,
+    getAllNotifications,
+    markNotificationRead
 } from "../controllers/notification.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
@@ -39,5 +41,17 @@ router.put("/:id/read", authenticate, markAsRead);
  * Mark all notifications as read
  */
 router.put("/read-all", authenticate, markAllAsRead);
+
+/**
+ * GET /api/notifications/all
+ * Get all notifications for club system
+ */
+router.get("/all", authenticate, getAllNotifications);
+
+/**
+ * PUT /api/notifications/:id/mark-read
+ * Mark notification as read (club system)
+ */
+router.put("/:id/mark-read", authenticate, markNotificationRead);
 
 export default router;

@@ -1,101 +1,164 @@
+/* Glassmorphism Club Card */
 .card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 16px;
-  margin: 16px;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-  max-width: 400px;
-  background-color: #fff;
-}
-
-.card h3 {
-  margin-top: 0;
-}
-
-.card p {
-  margin: 4px 0;
-}
-
-.card button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-.card button:hover {
-  background-color: #0056b3;
-}
-
-
-.card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 16px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 24px;
   margin: 16px 0;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-  background-color: #fff;
-  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  max-width: 400px;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 8px 32px rgba(0, 0, 0, 0.6);
+  border-color: rgba(6, 182, 212, 0.6);
 }
 
+/* Neon Title */
 .card h3 {
-  margin-top: 0;
+  margin: 0 0 16px 0;
+  color: #00ffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+  text-align: center;
+  background: rgba(6, 182, 212, 0.15);
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  border: 1px solid rgba(6, 182, 212, 0.2);
 }
 
+/* Description */
 .card p {
-  margin: 4px 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.card button {
-  padding: 8px 16px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 8px;
+/* Info Section */
+.club-info {
+  background: rgba(0, 0, 0, 0.5);
+  /* Deep black/transparent for contrast */
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.card button:hover {
-  background-color: #0056b3;
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
 }
 
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.info-value {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+}
+
+.info-value .email {
+  display: block;
+  font-size: 0.8rem;
+  color: #00ffff;
+  opacity: 0.8;
+}
+
+/* Active Members Badge (Using info row for now, but styling it up) */
+.info-row:first-child .info-value {
+  color: #00ff00;
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+}
+
+/* Buttons */
 .card-buttons {
   display: flex;
-  justify-content: flex-start; /* buttons at right */
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.details-btn {
-  background-color: #e89700 !important; /* blue for details */
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.details-btn:hover {
-  background-color: #d18800 !important;
-  transform: scale(1.05);
+  gap: 12px;
+  margin-top: auto;
 }
 
 .card button {
-  background-color: #22c55e; /* green for join */
-  color: #0f172a;
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.card button:hover {
-  background-color: #16a34a;
-  transform: scale(1.05);
+/* Join Button - Electric Green */
+.card button:first-child {
+  background: #00ff00;
+  color: #000;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
 }
 
+.card button:first-child:hover {
+  background: #33ff33;
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Details Button - Transparent/White */
+.card button:last-child {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card button:last-child:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card {
+    max-width: 100%;
+  }
+}

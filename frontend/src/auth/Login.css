@@ -1,122 +1,173 @@
+/* Dark Tech Auth Pages - Glassmorphism Design */
+
 /* Page wrapper */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f4f4f4;
-  /* calm light gray */
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--deep-space-black);
+  background-image:
+    radial-gradient(circle at 30% 40%, rgba(0, 217, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(0, 255, 240, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+  font-family: var(--font-body);
+  padding: 20px;
 }
 
-/* Card style form */
+/* Card style form - Glassmorphism */
 .auth-form {
-  background-color: #ffffff;
-  padding: 35px 25px;
-  border-radius: 10px;
-  width: 360px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #004080;
-  /* subtle college blue */
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 48px 40px;
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-darker), var(--glow-blue);
+  border: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Heading */
 .auth-form h2 {
-  color: #004080;
-  margin-bottom: 25px;
+  color: var(--text-white);
+  margin-bottom: 32px;
   text-align: center;
-  font-size: 1.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-futuristic);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--text-white), var(--electric-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Inputs and selects */
 .auth-form input,
 .auth-form select {
-  padding: 12px 15px;
-  margin-bottom: 18px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
   font-size: 1rem;
-  transition: border 0.2s, box-shadow 0.2s;
+  color: var(--text-white);
+  font-family: var(--font-body);
+  transition: all 0.3s ease;
+}
+
+.auth-form input::placeholder {
+  color: var(--text-dim);
 }
 
 /* Distinct style for the top role selector */
 .role-select {
-  border: 2px solid #004080 !important;
-  background-color: #f8fbff;
+  border: 2px solid var(--electric-blue) !important;
+  background: rgba(0, 217, 255, 0.05) !important;
   font-weight: 600;
-  color: #004080;
+  color: var(--electric-blue) !important;
+}
+
+.role-select option {
+  background: var(--space-gray);
+  color: var(--text-white);
 }
 
 .auth-form input:focus,
 .auth-form select:focus {
-  border-color: #004080;
-  box-shadow: 0 0 5px rgba(0, 64, 128, 0.3);
+  border-color: var(--electric-blue);
+  box-shadow: var(--glow-blue);
   outline: none;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Button */
+/* Button - Neon Glow */
 .auth-form button {
-  padding: 12px;
-  border-radius: 5px;
-  border: none;
-  background-color: #004080;
-  color: white;
+  padding: 14px 24px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--electric-blue);
+  background: linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));
+  color: var(--deep-space-black);
   font-size: 1rem;
   font-weight: 600;
+  font-family: var(--font-futuristic);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: var(--glow-blue);
 }
 
 .auth-form button:hover {
-  background-color: #003366;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--glow-blue-intense);
 }
 
-/* Links (optional) */
+/* Links */
 .auth-form a {
   text-decoration: none;
-  color: #004080;
-  font-size: 0.9rem;
+  color: var(--electric-blue);
+  font-size: 0.95rem;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 16px;
   display: block;
+  transition: all 0.3s ease;
 }
 
 .auth-form a:hover {
-  text-decoration: underline;
+  color: var(--neon-cyan);
+  text-shadow: var(--glow-blue);
 }
 
 /* Responsive */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .auth-form {
-    width: 90%;
-    padding: 30px 20px;
+    padding: 32px 24px;
+  }
+
+  .auth-form h2 {
+    font-size: 1.5rem;
   }
 }
 
-/* Message box */
+/* Message box - Dark Theme */
 .auth-message {
-  padding: 12px 15px;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
   font-size: 14px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   animation: slideFade 0.4s ease;
+  border: 1px solid;
 }
 
 .auth-message.success {
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border-color: #22c55e;
 }
 
 .auth-message.error {
-  background: #fef2f2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: #ef4444;
 }
 
 /* Smooth animation */
@@ -136,11 +187,16 @@
 input:focus,
 button:focus {
   outline: none;
-  box-shadow: none;
 }
 
-/* Remove Chrome autofill yellow */
+/* Chrome autofill - Dark Theme */
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
-  -webkit-text-fill-color: #1f2937;
+  -webkit-box-shadow: 0 0 0 1000px var(--space-gray) inset;
+  -webkit-text-fill-color: var(--text-white);
+  caret-color: var(--text-white);
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--space-gray) inset, var(--glow-blue);
+  -webkit-text-fill-color: var(--text-white);
 }

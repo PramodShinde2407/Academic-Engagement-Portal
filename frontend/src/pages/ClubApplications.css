@@ -1,0 +1,322 @@
+.applications-container {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.status-pill {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 8px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-pill.approved {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.status-pill.pending {
+    background: rgba(253, 186, 116, 0.2);
+    color: #fdba74;
+    border: 1px solid rgba(253, 186, 116, 0.3);
+}
+
+.approval-status-indicators {
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.applications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    background: rgba(11, 12, 16, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    margin: 0;
+    background: linear-gradient(135deg, #FFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #06b6d4;
+    cursor: pointer;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.filter-select {
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #FFF;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+}
+
+.filter-select option {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 10px;
+}
+
+.export-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    border: none;
+    border-radius: 8px;
+    color: #FFF;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+}
+
+.bulk-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    color: #FFF;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.bulk-btn.approve {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.bulk-btn.reject {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.bulk-btn:hover {
+    transform: translateY(-2px);
+}
+
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+}
+
+.application-card {
+    background: rgba(11, 12, 16, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.application-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(6, 182, 212, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.applicant-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    /* Square thumbnail as requested (or circular if preferred, user said "circular or square") */
+    object-fit: cover;
+    border: 3px solid #06b6d4;
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.applicant-info h3 {
+    margin: 0 0 8px 0;
+    color: #FFF;
+    font-size: 1.4rem;
+    /* Larger text */
+    font-weight: 700;
+    /* Bold */
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: rgba(234, 179, 8, 0.1);
+    color: #eab308;
+}
+
+.status-badge.approved {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.status-badge.rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.info-row {
+    margin-bottom: 12px;
+}
+
+.label {
+    display: block;
+    color: #94A3B8;
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+}
+
+.value {
+    color: #E2E8F0;
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.sop-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sop-text {
+    color: #CBD5E1;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-height: 150px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    background: rgba(255, 255, 255, 0.05);
+    /* Gray block */
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid #94A3B8;
+    /* Quote style */
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.card-actions {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.actions-group {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.my-status-pill {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+}
+
+.my-status-pill.approved {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.my-status-pill.rejected {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.approve-btn,
+.reject-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.approve-btn {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.approve-btn:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.reject-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.reject-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    color: #06b6d4;
+    font-size: 1.2rem;
+}
+
+.no-data {
+    text-align: center;
+    padding: 60px;
+    color: #64748B;
+    font-size: 1.1rem;
+}

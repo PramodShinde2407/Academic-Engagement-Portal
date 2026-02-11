@@ -55,10 +55,14 @@ export const createPermissionRequest = async (req, res, next) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
+        if (!club_id) {
+            return res.status(400).json({ message: "Club ID is required" });
+        }
+
         // Create the permission request
         const requestId = await PermissionModel.create({
             club_head_id,
-            club_id: club_id || null,
+            club_id,
             subject,
             description,
             location,
@@ -67,8 +71,14 @@ export const createPermissionRequest = async (req, res, next) => {
             end_time
         });
 
-        // Notify Club Mentor
-        const clubMentorId = await getUserByRole('Club Mentor');
+        // Get the specific club mentor for this club
+        const [clubRows] = await db.query(
+            'SELECT club_mentor_id FROM club WHERE club_id = ?',
+            [club_id]
+        );
+
+        const clubMentorId = clubRows[0]?.club_mentor_id;
+
         if (clubMentorId) {
             await NotificationModel.create(
                 clubMentorId,
@@ -115,7 +125,8 @@ export const getMyRequests = async (req, res, next) => {
 export const getPendingRequests = async (req, res, next) => {
     try {
         const userRole = req.userRole; // Set by middleware
-        const requests = await PermissionModel.findPendingForRole(userRole);
+        const userId = req.user.id;
+        const requests = await PermissionModel.findPendingForRole(userRole, userId);
 
         res.json(requests);
     } catch (err) {
@@ -187,13 +198,32 @@ export const approveRequest = async (req, res, next) => {
 
         // Send notifications
         if (newStatus === 'approved') {
-            // Final approval - notify Club Head
+            // Final approval - notify both Club Head and Club Mentor
             await NotificationModel.create(
                 request.club_head_id,
                 requestId,
                 `Your permission request "${request.subject}" has been APPROVED by all authorities!`,
                 'final_approval'
             );
+
+            // Also notify the club mentor
+            if (request.club_id) {
+                const [clubRows] = await db.query(
+                    'SELECT club_mentor_id FROM club WHERE club_id = ?',
+                    [request.club_id]
+                );
+
+                const clubMentorId = clubRows[0]?.club_mentor_id;
+
+                if (clubMentorId) {
+                    await NotificationModel.create(
+                        clubMentorId,
+                        requestId,
+                        `Permission request "${request.subject}" has been APPROVED by all authorities!`,
+                        'final_approval'
+                    );
+                }
+            }
         } else {
             // Notify next approver
             const nextApproverId = await getUserByRole(newApproverRole);

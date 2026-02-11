@@ -71,10 +71,19 @@ export default function EventRegisterPage() {
     setIsSubmitting(true);
 
     try {
-      // 1️⃣ Send to your backend first
+      // 1️⃣ Send to your backend
       await api.post(
         "/event-registrations/register",
-        { event_id: event.event_id },
+        {
+          event_id: event.event_id,
+          full_name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          department: formData.department,
+          year: formData.year,
+          roll_no: formData.rollNo,
+          notes: formData.notes
+        },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
 

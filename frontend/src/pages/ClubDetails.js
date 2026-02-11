@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ClubDetails.css";
 import api from "../api/axios";
+import RegistrationModal from "../components/RegistrationModal";
 
 export default function ClubDetails() {
   const { clubId } = useParams();
@@ -10,6 +11,7 @@ export default function ClubDetails() {
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [applicationStatus, setApplicationStatus] = useState(null);
 
   const [toast, setToast] = useState(null);
   const [toastType, setToastType] = useState("success");
@@ -24,6 +26,9 @@ export default function ClubDetails() {
   const [studentBranch, setStudentBranch] = useState("");
   const [showRemoveStudent, setShowRemoveStudent] = useState(false);
   const [removeEmail, setRemoveEmail] = useState("");
+
+  // Registration modal state
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
 
 
 
@@ -79,6 +84,18 @@ export default function ClubDetails() {
           club_head_id: res.data.club_head_id || "",
         });
       }
+
+      // Check application status if user is logged in
+      if (user) {
+        try {
+          const statusRes = await api.get(`/club-registrations/${clubId}/status`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setApplicationStatus(statusRes.data.status);
+        } catch (err) {
+          console.error("Failed to fetch application status", err);
+        }
+      }
     } catch {
       showToast("Failed to fetch club ❌", "error");
     } finally {
@@ -87,7 +104,12 @@ export default function ClubDetails() {
   };
 
 
-  const isClubHead = user && club && club.club_head_id === user.id;
+  const canManageClub = user && club && (
+    club.club_head_id === user.id ||
+    club.club_mentor_id === user.id ||
+    user.role_name === "Admin" ||
+    user.role_id === 4
+  );
 
   const deleteClub = async () => {
     try {
@@ -164,6 +186,25 @@ export default function ClubDetails() {
       fetchClub(); // refresh members
     } catch (err) {
       showToast(err.response?.data?.message || "Failed to remove student ❌", "error");
+    }
+  };
+
+  const handleMarkInterested = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        showToast("Please login to mark interest", "error");
+        navigate("/login");
+        return;
+      }
+
+      await api.post(`/club-interest/${clubId}/interested`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      showToast("You will be notified when registration opens! 🔔", "success");
+    } catch (err) {
+      showToast(err.response?.data?.message || "Failed to mark interest", "error");
     }
   };
 
@@ -244,7 +285,7 @@ export default function ClubDetails() {
                     <ul key={i} className="member-item">
                       {m.student_name || m.name}
 
-                      {isClubHead && (
+                      {canManageClub && (
                         <button
                           className="remove-btn"
                           onClick={() => {
@@ -264,7 +305,36 @@ export default function ClubDetails() {
           </>
         )}
 
-        {isClubHead && (
+        {/* Dual-Action Buttons for Non-Club-Head Users */}
+        {!canManageClub && user && (
+          <div className="club-action-section">
+            {/* Check if user is already a member */}
+            {club.members && club.members.some(m => m.user_id === user.id || m.email === user.email) ? (
+              <button className="is-member-btn" disabled>
+                ✅ You are a Member
+              </button>
+            ) : applicationStatus === 'Pending' ? (
+              <button className="is-member-btn pending-btn" disabled style={{ background: '#f59e0b', cursor: 'not-allowed' }}>
+                ⏳ Application Pending
+              </button>
+            ) : (
+              <button
+                className="register-btn"
+                onClick={() => setShowRegistrationModal(true)}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="8.5" cy="7" r="4"></circle>
+                  <line x1="20" y1="8" x2="20" y2="14"></line>
+                  <line x1="23" y1="11" x2="17" y2="11"></line>
+                </svg>
+                Apply to Join Club
+              </button>
+            )}
+          </div>
+        )}
+
+        {canManageClub && (
           <div className="club-admin-buttons">
             <button onClick={() => setEditing(true)}>Edit Club</button>
             <button className="delete-btn" onClick={() => setShowConfirm(true)}>Delete Club</button>
@@ -352,8 +422,6 @@ export default function ClubDetails() {
           </div>
         </div>
       )}
-
-
 
       {toast && <div className={`toast ${toastType}`}>{toast}</div>}
     </>

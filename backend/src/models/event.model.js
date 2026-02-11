@@ -15,5 +15,10 @@ export const EventModel = {
   getAll: async () => {
     const [rows] = await db.query("SELECT * FROM event");
     return rows;
+  },
+
+  getById: async (eventId) => {
+    const [rows] = await db.query("SELECT * FROM event WHERE event_id = ?", [eventId]);
+    return rows[0];
   }
 };

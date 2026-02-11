@@ -1,42 +1,58 @@
+/* Dark Tech Event Pages - Glassmorphism Design */
+
 /* ===========================
    EVENT CARD CONTAINER
 =========================== */
 .event-cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-  padding: 20px;
+  gap: 32px;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* ===========================
-   EVENT CARD
+   EVENT CARD - Glassmorphism
 =========================== */
 .event-card {
-  background: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .event-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 8px 32px rgba(0, 0, 0, 0.6);
+  border-color: rgba(6, 182, 212, 0.6);
 }
 
 .event-card h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #1f2937;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: var(--text-white);
+  font-family: var(--font-futuristic);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .event-card p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #4b5563;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: var(--text-gray);
+  line-height: 1.6;
 }
 
 /* ===========================
@@ -45,255 +61,246 @@
 .event-info {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  font-size: 13px;
-  color: #6b7280;
-  margin-bottom: 15px;
+  gap: 12px;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 20px;
 }
 
 .event-info span {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
 }
 
 /* ===========================
-   BUTTONS
+   BUTTONS - Neon Glow
 =========================== */
 .event-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .event-buttons button {
   flex: 1;
-  padding: 10px 12px;
-  border: none;
-  border-radius: 10px;
+  padding: 12px 20px;
+  border: 2px solid;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: var(--font-futuristic);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .register-btn {
-  background: #2563eb;
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));
+  color: var(--deep-space-black);
+  border-color: var(--electric-blue);
+  box-shadow: var(--glow-blue);
 }
 
 .register-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--glow-blue-intense);
 }
 
 .details-btn {
-  background: #0055ff;
-  color: #ffffff;
+  background: transparent;
+  color: var(--electric-blue);
+  border-color: var(--electric-blue);
+  box-shadow: var(--glow-blue);
 }
 
 .details-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(107, 114, 128, 0.3);
-}
-
-/* ===========================
-   TOAST MESSAGE
-=========================== */
-.toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 999;
-  animation: fadeIn 0.3s ease;
-}
-
-.toast.success {
-  background: #16a34a;
-}
-
-.toast.error {
-  background: #dc2626;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  background: var(--glass-bg);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--glow-blue-intense);
 }
 
 /* ===========================
    EVENT DETAILS PAGE
 =========================== */
 .event-details-container {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 25px;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 48px;
+  /* Lighter, tinted background specific to Details page form */
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  font-family: 'Inter', sans-serif;
+  color: #e2e8f0;
 }
 
 .event-details-container h1 {
-  font-size: 26px;
-  margin-bottom: 15px;
-  color: #1f2937;
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+  color: var(--text-white);
+  font-family: var(--font-futuristic);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
 .event-details-container p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  color: #4b5563;
+  font-size: 1.05rem;
+  margin-bottom: 16px;
+  color: var(--text-gray);
+  line-height: 1.7;
+}
+
+.event-details-container strong {
+  color: var(--electric-blue);
 }
 
 /* Edit form in details page */
 .edit-form input,
 .edit-form textarea {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
   border-radius: 10px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1rem;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
   outline: none;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.edit-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.edit-form input::placeholder,
+.edit-form textarea::placeholder {
+  color: #94a3b8;
 }
 
 .edit-form input:focus,
 .edit-form textarea:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: #00ffff;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
 }
 
 .edit-buttons button {
-  margin-right: 10px;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 10px;
+  padding: 12px 24px;
+  border: 2px solid;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: var(--font-futuristic);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.edit-buttons button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
-}
-
-.cancel-btn {
-  background: #9ca3af;
-  color: #fff;
-}
-
-.delete-btn {
-  background: #dc2626;
-  color: #fff;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ===========================
-   EVENT DETAILS PAGE BUTTON COLORS
-=========================== */
-
-/* Edit Event Details button (blue) */
+/* Edit button */
 .event-buttons .edit-btn {
-  background: #0051ff; /* Blue background */
-  color: #ffffff;         /* Black text */
+  background: linear-gradient(135deg, var(--electric-blue), var(--neon-cyan));
+  color: var(--deep-space-black);
+  border-color: var(--electric-blue);
+  box-shadow: var(--glow-blue);
 }
 
 .event-buttons .edit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--glow-blue-intense);
 }
 
-/* Save Changes button (green) */
+/* Save button */
 .edit-buttons .save-btn {
-  background: #2dc959; /* Green background */
-  color: #ffffff;         /* Black text */
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: var(--text-white);
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
 }
 
 .edit-buttons .save-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(22, 163, 74, 0.3);
-  background-color: #00b633;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.8), 0 0 60px rgba(34, 197, 94, 0.4);
 }
 
-/* Cancel button remains gray */
-.edit-buttons .cancel-btn {
-  background: #9ca3af;
-  color: #000; /* Black text */
+/* Cancel button */
+.edit-buttons .cancel-btn,
+.delete-confirm-buttons .cancel-btn {
+  background: rgba(156, 163, 175, 0.2);
+  color: var(--text-gray);
+  border-color: var(--glass-border);
 }
 
-.edit-buttons .cancel-btn:hover {
+.edit-buttons .cancel-btn:hover,
+.delete-confirm-buttons .cancel-btn:hover {
+  background: rgba(156, 163, 175, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(156, 163, 175, 0.3);
-  background-color:#82868c ;
 }
-/* ===========================
-   DELETE EVENT BUTTON STYLING
-=========================== */
+
+/* Delete button */
 .event-buttons .delete-btn {
-  background: #e50000; /* Darker red */
-  color: #ffffff;          /* Black text */
-  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); /* subtle shadow */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: var(--text-white);
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
 }
 
 .event-buttons .delete-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(170, 0, 0, 0.4); /* slightly stronger shadow on hover */
-  background-color: #cf0000;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.8), 0 0 60px rgba(239, 68, 68, 0.4);
 }
 
-
-
-
-
-
-
-
-
-
-
 /* ===========================
-   TOAST MESSAGES (EventDetails)
+   TOAST MESSAGES - Dark Theme
 =========================== */
 .toast {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f5f5f5, #e5e7eb) !important;
-  color: rgb(0, 0, 0);
-  font-size: 14px;
+  bottom: 32px;
+  right: 32px;
+  padding: 16px 24px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
   font-weight: 500;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-body);
+  color: var(--text-white);
   animation: slideUp 0.4s ease;
   z-index: 9999;
+  box-shadow: var(--shadow-darker);
+  border: 1px solid;
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-color: #22c55e;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
 }
 
 /* ===========================
@@ -301,45 +308,51 @@
 =========================== */
 .delete-confirm-toast {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #ffffff;
-  padding: 16px 18px;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  bottom: 32px;
+  right: 32px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 20px 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-darker), var(--glow-blue);
   animation: slideUp 0.4s ease;
   z-index: 9999;
-  min-width: 260px;
+  min-width: 300px;
+  border: 1px solid var(--glass-border);
 }
 
 .delete-confirm-toast p {
-  margin: 0 0 12px;
-  font-size: 15px;
+  margin: 0 0 16px;
+  font-size: 1rem;
   font-weight: 500;
-  color: #111827;
+  color: var(--text-white);
 }
 
 .delete-confirm-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .delete-confirm-buttons .confirm-btn {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: var(--text-white);
+  border: 2px solid #ef4444;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-futuristic);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  transition: all 0.3s ease;
 }
 
-.delete-confirm-buttons .cancel-btn {
-  background: #e5e7eb;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+.delete-confirm-buttons .confirm-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.8);
 }
 
 @keyframes slideUp {
@@ -353,11 +366,25 @@
     transform: translateY(0);
   }
 }
-.delete-confirm-buttons .cancel-btn {
-  background: #e5e7eb; /* light gray background */
-  color: #000;          /* black text */
-  border: none;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
+
+/* Responsive */
+@media (max-width: 768px) {
+  .event-details-container {
+    padding: 32px 24px;
+    margin: 40px 20px;
+  }
+
+  .event-details-container h1 {
+    font-size: 2rem;
+  }
+
+  .event-buttons,
+  .edit-buttons {
+    flex-direction: column;
+  }
+
+  .event-buttons button,
+  .edit-buttons button {
+    width: 100%;
+  }
 }

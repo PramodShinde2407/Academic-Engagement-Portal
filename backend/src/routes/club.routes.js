@@ -1,7 +1,7 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
-import {createClub,getClubs,getClubById,updateClub ,deleteClub,addStudentToClub,removeStudentFromClub,getClubMembers } from "../controllers/club.controller.js";
+import { createClub, getAllClubs, getClubById, updateClub, deleteClub, addStudentToClub, removeStudentFromClub, getClubMembers, toggleRegistration } from "../controllers/club.controller.js";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   "/",
   authenticate,
-  authorizeRoles(2, 3,4), // example: 2 = Faculty, 3 = Admin
+  authorizeRoles(2, 3, 4), // example: 2 = Faculty, 3 = Admin
   createClub
 );
 
@@ -22,7 +22,7 @@ router.post(
  */
 router.get(
   "/",
-  getClubs
+  getAllClubs
 );
 // Add this below the existing router.get("/") route
 router.get("/:id", getClubById);
@@ -55,6 +55,12 @@ router.get(
   "/:clubId/members",
   authenticate,
   getClubMembers
+);
+
+router.put(
+  "/:clubId/toggle-registration",
+  authenticate,
+  toggleRegistration
 );
 
 

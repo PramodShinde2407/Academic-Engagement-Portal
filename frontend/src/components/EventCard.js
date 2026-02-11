@@ -11,6 +11,9 @@ export default function EventCard({ event }) {
     setTimeout(() => setToast(null), 3000);
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isOrganizer = user && event.organizer_id === user.id;
+
   const handleRegisterClick = () => {
     navigate(`/events/${event.event_id}/register`, {
       state: { event } // optional, useful later
@@ -25,6 +28,7 @@ export default function EventCard({ event }) {
     <>
       <div className="event-card">
         <h3>{event.title}</h3>
+        {isOrganizer && <span className="organizer-badge">Admin/Organized</span>}
         <p>{event.description}</p>
 
         <div className="event-info">
@@ -36,9 +40,11 @@ export default function EventCard({ event }) {
         </div>
 
         <div className="event-buttons">
-          <button className="register-btn" onClick={handleRegisterClick}>
-            Register
-          </button>
+          {!isOrganizer && (
+            <button className="register-btn" onClick={handleRegisterClick}>
+              Register
+            </button>
+          )}
           <button className="details-btn" onClick={handleViewDetails}>
             View Details
           </button>
