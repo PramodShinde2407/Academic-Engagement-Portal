@@ -15,6 +15,7 @@ export default function EventRegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -46,6 +47,20 @@ export default function EventRegisterPage() {
         .catch(() => toast.error("Failed to load event details ❌"));
     }
   }, [eventId, event, isAuthenticated]);
+
+  // Check if already registered
+  useEffect(() => {
+    if (isAuthenticated && eventId) {
+      api.get(`/event-registrations/my`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      })
+        .then(res => {
+          const alreadyIn = res.data.some(e => String(e.event_id) === String(eventId));
+          setIsAlreadyRegistered(alreadyIn);
+        })
+        .catch(() => { }); // silently fail
+    }
+  }, [isAuthenticated, eventId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,8 +143,34 @@ export default function EventRegisterPage() {
       });
 
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to register ❌");
+      console.error('Registration error:', err);
+
+      // Handle specific error responses from backend
+      if (err.response) {
+        const errorMessage = err.response.data?.message || 'Failed to register';
+
+        // Handle specific error codes
+        if (err.response.status === 409) {
+          toast.warning(errorMessage + ' ⚠️');
+        } else if (err.response.status === 401) {
+          toast.error('Please login again 🔒');
+          setTimeout(() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/login');
+          }, 2000);
+        } else if (err.response.status === 400) {
+          toast.error(errorMessage + ' ❌');
+        } else {
+          toast.error(errorMessage + ' ❌');
+        }
+      } else if (err.request) {
+        // Request was made but no response received
+        toast.error('Cannot connect to server. Please check if backend is running ❌');
+      } else {
+        // Something else happened
+        toast.error('Failed to register ❌');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -138,6 +179,27 @@ export default function EventRegisterPage() {
   // Don't render anything until authentication is verified
   if (isChecking || !isAuthenticated) {
     return null;
+  }
+
+  // Show already registered message
+  if (isAlreadyRegistered) {
+    return (
+      <div className="event-register-container">
+        <ToastContainer position="top-right" autoClose={4000} />
+        <div className="event-register-form" style={{ textAlign: 'center', padding: '40px' }}>
+          <h2>✅ Already Registered!</h2>
+          <p style={{ marginTop: '16px', color: '#6b7280' }}>
+            You have already registered for <strong>{event?.title || 'this event'}</strong>.
+          </p>
+          <button
+            style={{ marginTop: '24px' }}
+            onClick={() => navigate('/events')}
+          >
+            Back to Events
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

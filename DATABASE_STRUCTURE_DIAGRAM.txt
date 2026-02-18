@@ -1,0 +1,76 @@
+```
+DATABASE STRUCTURE WITH club_mentor_id
+========================================
+
+┌─────────────────────────────────────────────────────────────┐
+│                         USER TABLE                          │
+├──────────────┬──────────────┬─────────────┬─────────────────┤
+│ user_id (PK) │ name         │ email       │ role_id (FK)    │
+├──────────────┼──────────────┼─────────────┼─────────────────┤
+│ 1            │ John Doe     │ john@...    │ 3 (Club Head)   │
+│ 2            │ Jane Smith   │ jane@...    │ 4 (Club Mentor) │
+│ 3            │ Bob Wilson   │ bob@...     │ 2 (Student)     │
+└──────────────┴──────────────┴─────────────┴─────────────────┘
+                     ▲                    ▲
+                     │                    │
+                     │ References         │ References
+                     │                    │
+┌────────────────────┴────────────────────┴───────────────────┐
+│                        CLUB TABLE                           │
+├──────────────┬──────────┬────────────────┬──────────────────┤
+│ club_id (PK) │ name     │ club_head_id   │ club_mentor_id   │
+│              │          │ (FK → user)    │ (FK → user)      │
+├──────────────┼──────────┼────────────────┼──────────────────┤
+│ 1            │ Tech Club│ 1 (John)       │ 2 (Jane)         │
+│ 2            │ Art Club │ ...            │ ...              │
+└──────────────┴──────────┴────────────────┴──────────────────┘
+                     │
+                     │ References
+                     ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  PERMISSION_REQUEST TABLE                   │
+├──────────────┬──────────────┬──────────────┬────────────────┤
+│ request_id   │ club_id (FK) │ club_head_id │ current_status │
+├──────────────┼──────────────┼──────────────┼────────────────┤
+│ 1            │ 1 (Tech)     │ 1 (John)     │ pending_...    │
+└──────────────┴──────────────┴──────────────┴────────────────┘
+
+
+PERMISSION FLOW WITH club_mentor_id
+====================================
+
+1. Club Head creates permission request
+   ↓
+   [club_id = 1 is included in request]
+
+2. System queries: SELECT club_mentor_id FROM club WHERE club_id = 1
+   ↓
+   [Result: club_mentor_id = 2 (Jane)]
+
+3. Notification sent ONLY to user_id = 2 (Jane)
+   ↓
+   [Jane sees the request in her dashboard]
+
+4. Jane approves → Estate Manager → Principal → Director
+   ↓
+   [All approve]
+
+5. Final approval: Notify BOTH
+   - club_head_id = 1 (John) ✓
+   - club_mentor_id = 2 (Jane) ✓
+
+
+WHY THIS DESIGN IS CORRECT
+===========================
+
+✓ Each club has ONE head and ONE mentor
+✓ Easy to find: "Which club does this user head/mentor?"
+  → SELECT * FROM club WHERE club_head_id = ? OR club_mentor_id = ?
+
+✓ Easy to find: "Who is the mentor of this club?"
+  → SELECT club_mentor_id FROM club WHERE club_id = ?
+
+✓ Students can join MULTIPLE clubs (via club_member table)
+✓ No redundant data in user table
+✓ Clear ownership: Club owns the relationship
+```

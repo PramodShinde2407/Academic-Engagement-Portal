@@ -45,12 +45,10 @@ export const getAllClubs = async (req, res, next) => {
         mentor.email as mentor_email,
         head.name as head_name,
         head.email as head_email,
-        COALESCE(COUNT(DISTINCT ca.application_id), 0) + 1 as active_members
+        (SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = c.club_id) + 1 as active_members
       FROM club c
       LEFT JOIN user mentor ON c.club_mentor_id = mentor.user_id
       LEFT JOIN user head ON c.club_head_id = head.user_id
-      LEFT JOIN club_application ca ON c.club_id = ca.club_id AND ca.status = 'approved'
-      GROUP BY c.club_id
     `);
 
     res.json(clubs);
@@ -69,7 +67,8 @@ export const getClubById = async (req, res, next) => {
           mentor.name as mentor_name,
           mentor.email as mentor_email,
           head.name as head_name,
-          head.email as head_email
+          head.email as head_email,
+          (SELECT COUNT(*) FROM club_member cm WHERE cm.club_id = c.club_id) + 1 as active_members
        FROM club c
        LEFT JOIN user mentor ON c.club_mentor_id = mentor.user_id
        LEFT JOIN user head ON c.club_head_id = head.user_id
@@ -251,9 +250,12 @@ export const getClubMembers = async (req, res) => {
     const { clubId } = req.params;
 
     const [members] = await db.query(
-      `SELECT user_id, student_name, email, roll_no, year, branch
-       FROM club_member
-       WHERE club_id = ?`,
+      `SELECT 
+        cm.user_id, cm.student_name, cm.email, cm.roll_no, cm.year, cm.branch,
+        ca.personal_email, ca.college_email, ca.division, ca.department, ca.phone_no, ca.statement_of_purpose, ca.photo_url
+       FROM club_member cm
+       LEFT JOIN club_application ca ON cm.user_id = ca.user_id AND cm.club_id = ca.club_id
+       WHERE cm.club_id = ?`,
       [clubId]
     );
 
@@ -261,6 +263,22 @@ export const getClubMembers = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch members" });
+  }
+};
+
+// Get clubs the user is enrolled in
+export const getMyEnrolledClubs = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    // Check both club_member (by user_id) AND club_application (Approved status)
+    const [rows] = await db.query(`
+      SELECT DISTINCT club_id FROM club_member WHERE user_id = ?
+      UNION
+      SELECT DISTINCT club_id FROM club_application WHERE user_id = ? AND status = 'Approved'
+    `, [userId, userId]);
+    res.json(rows.map(r => r.club_id));
+  } catch (err) {
+    next(err);
   }
 };
 

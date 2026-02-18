@@ -19,15 +19,26 @@ export default function Clubs() {
   const [toast, setToast] = useState(null);
   const [toastType, setToastType] = useState("success");
 
+  const [enrolledClubs, setEnrolledClubs] = useState([]);
+
   const user = JSON.parse(localStorage.getItem("user") || "null"); // { id, role_id, name }
 
   const fetchClubs = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await api.get("/clubs", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const res = await api.get("/clubs", { headers });
       setClubs(res.data);
+
+      if (user) {
+        try {
+          const enrolledRes = await api.get("/clubs/my/enrolled", { headers });
+          setEnrolledClubs(enrolledRes.data);
+        } catch (e) {
+          console.error("Failed to fetch enrolled clubs", e);
+        }
+      }
     } catch (err) {
       console.error("Failed to fetch clubs", err);
     } finally {
@@ -137,6 +148,7 @@ export default function Clubs() {
                 key={c.club_id}
                 club={c}
                 onJoin={handleJoinClick}
+                isEnrolled={enrolledClubs.some(id => String(id) === String(c.club_id))}
               />
             ))}
           </div>
@@ -155,6 +167,7 @@ export default function Clubs() {
             setToastType("success");
             setToast(msg);
             setShowModal(false);
+            fetchClubs(); // Refresh to update "Join" -> "Details"
             setTimeout(() => setToast(null), 3000);
           }}
         />

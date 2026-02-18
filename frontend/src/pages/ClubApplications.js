@@ -9,9 +9,10 @@ export default function ClubApplications() {
     const [applications, setApplications] = useState([]);
     const [clubName, setClubName] = useState('');
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState('pending'); // pending, approved, rejected, all
+    const [filter, setFilter] = useState('Pending'); // Pending, Approved, Rejected, all
     const [toast, setToast] = useState(null);
     const [club, setClub] = useState(null);
+    const [selectedApp, setSelectedApp] = useState(null); // For Modal
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -71,25 +72,8 @@ export default function ClubApplications() {
         }
     };
 
-    const handleExport = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await api.get(`/club-registrations/${clubId}/export`, {
-                headers: { Authorization: `Bearer ${token}` },
-                responseType: 'blob',
-            });
+    // Export function removed as per new requirements
 
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${clubName}_applications.csv`);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        } catch (err) {
-            showToast('Export failed', 'error');
-        }
-    };
 
     const handleBulkAction = async (newStatus) => {
         const pendingApps = applications.filter(app => app.status === 'Pending');
@@ -159,15 +143,14 @@ export default function ClubApplications() {
                         onChange={(e) => setFilter(e.target.value)}
                         className="filter-select"
                     >
-                        <option value="pending">Pending Review</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
+                        <option value="Pending">Pending Review</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
                         <option value="all">All Applications</option>
                     </select>
 
-                    <button className="export-btn" onClick={handleExport}>
-                        Export Data 📥
-                    </button>
+
+
                 </div>
             </div>
 
@@ -178,13 +161,15 @@ export default function ClubApplications() {
             ) : (
                 <div className="applications-grid">
                     {filteredApps.map(app => {
-                        const isHead = user.id === club?.club_head_id;
-                        const isMentor = user.id === club?.club_mentor_id;
+                        // Correctly derive user role flags inside map is inefficient but safe for now
+                        const isHead = Number(user.id) === Number(club?.club_head_id);
+                        const isMentor = Number(user.id) === Number(club?.club_mentor_id);
                         const isAdmin = user.role_id === 4 || user.role_name === 'Admin';
 
-                        const myStatus = isHead ? app.head_approval_status :
-                            isMentor ? app.mentor_approval_status :
-                                null;
+                        // Determine current user's specific status on this app
+                        let myActionStatus = 'Pending';
+                        if (isHead) myActionStatus = app.head_approval_status;
+                        else if (isMentor) myActionStatus = app.mentor_approval_status;
 
                         return (
                             <div key={app.application_id} className="application-card">
@@ -197,66 +182,64 @@ export default function ClubApplications() {
                                     />
                                     <div className="applicant-info">
                                         <h3>{app.full_name}</h3>
-                                        <span className={`status-badge ${app.status}`}>{app.status}</span>
+                                        <span className={`status-badge ${app.status?.toLowerCase()}`}>{app.status}</span>
                                     </div>
                                 </div>
 
                                 <div className="card-body">
                                     <div className="info-row">
                                         <span className="label">College Email:</span>
-                                        <a href={`mailto:${app.college_email}`} className="value">{app.college_email}</a>
+                                        <span className="value">{app.college_email}</span>
                                     </div>
                                     <div className="info-row">
-                                        <span className="label">Personal Email:</span>
-                                        <a href={`mailto:${app.personal_email}`} className="value">{app.personal_email}</a>
+                                        <span className="label">Year/Dept:</span>
+                                        <span className="value">{app.year} / {app.department}</span>
                                     </div>
-                                    <div className="info-row sop-section">
-                                        <span className="label">Statement of Purpose:</span>
-                                        <p className="sop-text">{app.statement_of_purpose}</p>
-                                    </div>
-                                    <div className="info-row">
-                                        <span className="label">Applied:</span>
-                                        <span className="value">{new Date(app.applied_at).toLocaleDateString()}</span>
-                                    </div>
-                                </div>
 
-                                {app.status === 'Pending' && (
-                                    <div className="card-actions">
-                                        <div className="approval-status-indicators">
-                                            <span className={`status-pill ${app.head_approval_status === 'Approved' ? 'approved' : 'pending'}`}>
-                                                Head: {app.head_approval_status || 'Pending'}
-                                            </span>
-                                            <span className={`status-pill ${app.mentor_approval_status === 'Approved' ? 'approved' : 'pending'}`}>
-                                                Mentor: {app.mentor_approval_status || 'Pending'}
-                                            </span>
+                                    <button
+                                        className="view-details-btn"
+                                        onClick={() => setSelectedApp(app)}
+                                    >
+                                        View Full Details
+                                    </button>
+
+                                    {/* Dual Approval Status Indicators */}
+                                    <div className="approval-status-grid">
+                                        <div className={`status-pill ${app.head_approval_status === 'Approved' ? 'approved' : 'pending'}`}>
+                                            HEAD: {app.head_approval_status || 'Pending'}
                                         </div>
-
-                                        {(isHead || isMentor || isAdmin) && (
-                                            <div className="actions-group">
-                                                {(isAdmin || (myStatus !== 'Approved' && myStatus !== 'Rejected')) ? (
-                                                    <>
-                                                        <button
-                                                            className="approve-btn"
-                                                            onClick={() => handleStatusUpdate(app.application_id, 'Approved')}
-                                                        >
-                                                            Approve
-                                                        </button>
-                                                        <button
-                                                            className="reject-btn"
-                                                            onClick={() => handleStatusUpdate(app.application_id, 'Rejected')}
-                                                        >
-                                                            Reject
-                                                        </button>
-                                                    </>
-                                                ) : (
-                                                    <span className={`my-status-pill ${myStatus?.toLowerCase()}`}>
-                                                        You marked: {myStatus}
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
+                                        <div className={`status-pill ${app.mentor_approval_status === 'Approved' ? 'approved' : 'pending'}`}>
+                                            MENTOR: {app.mentor_approval_status || 'Pending'}
+                                        </div>
                                     </div>
-                                )}
+
+                                    {/* Action Buttons */}
+                                    {app.status === 'Pending' && (
+                                        <div className="card-actions">
+                                            {/* Show buttons if Admin OR if User hasn't acted yet */}
+                                            {(isAdmin || (myActionStatus !== 'Approved' && myActionStatus !== 'Rejected')) ? (
+                                                <>
+                                                    <button
+                                                        className="approve-btn"
+                                                        onClick={() => handleStatusUpdate(app.application_id, 'Approved')}
+                                                    >
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        className="reject-btn"
+                                                        onClick={() => handleStatusUpdate(app.application_id, 'Rejected')}
+                                                    >
+                                                        Reject
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <div className="action-feedback">
+                                                    You marked: <strong>{myActionStatus}</strong>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         );
                     })}
@@ -264,6 +247,102 @@ export default function ClubApplications() {
             )}
 
             {toast && <div className={`toast ${toast.type}`}>{toast.msg}</div>}
+
+            {/* Application Details Modal */}
+            {selectedApp && (
+                <div className="modal-overlay" onClick={() => setSelectedApp(null)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <button className="close-modal" onClick={() => setSelectedApp(null)}>×</button>
+                        <h2>Application Details</h2>
+
+                        <div className="applicant-details">
+                            <div className="detail-row">
+                                <strong>Full Name:</strong> {selectedApp.full_name}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Roll No:</strong> {selectedApp.roll_no || 'N/A'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Department:</strong> {selectedApp.department || 'N/A'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Year:</strong> {selectedApp.year || 'N/A'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Division:</strong> {selectedApp.division || 'N/A'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Phone:</strong> {selectedApp.phone_no || 'N/A'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>College Email:</strong> {selectedApp.college_email}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Personal Email:</strong> {selectedApp.personal_email}
+                            </div>
+                            <div className="detail-row full-width">
+                                <strong>Statement of Purpose:</strong>
+                                <p className="sop-text-modal">{selectedApp.statement_of_purpose}</p>
+                            </div>
+                            <div className="detail-row">
+                                <strong>Status:</strong> <span className={`status-badge ${selectedApp.status}`}>{selectedApp.status}</span>
+                            </div>
+                            <div className="detail-row">
+                                <strong>Head Approval:</strong> {selectedApp.head_approval_status || 'Pending'}
+                            </div>
+                            <div className="detail-row">
+                                <strong>Mentor Approval:</strong> {selectedApp.mentor_approval_status || 'Pending'}
+                            </div>
+
+                            {/* Action Buttons Inside Modal */}
+                            {selectedApp.status === 'Pending' && (
+                                <div className="modal-actions" style={{ marginTop: '20px', display: 'flex', gap: '10px', width: '100%' }}>
+                                    {(() => {
+                                        const isHead = Number(user.id) === Number(club?.club_head_id);
+                                        const isMentor = Number(user.id) === Number(club?.club_mentor_id);
+                                        const isAdmin = user.role_id === 4 || user.role_name === 'Admin';
+
+                                        let myActionStatus = 'Pending';
+                                        if (isHead) myActionStatus = selectedApp.head_approval_status;
+                                        else if (isMentor) myActionStatus = selectedApp.mentor_approval_status;
+
+                                        if (isAdmin || (myActionStatus !== 'Approved' && myActionStatus !== 'Rejected')) {
+                                            return (
+                                                <>
+                                                    <button
+                                                        className="approve-btn"
+                                                        onClick={() => {
+                                                            handleStatusUpdate(selectedApp.application_id, 'Approved');
+                                                            setSelectedApp(null);
+                                                        }}
+                                                    >
+                                                        Approve Application
+                                                    </button>
+                                                    <button
+                                                        className="reject-btn"
+                                                        onClick={() => {
+                                                            handleStatusUpdate(selectedApp.application_id, 'Rejected');
+                                                            setSelectedApp(null);
+                                                        }}
+                                                    >
+                                                        Reject Application
+                                                    </button>
+                                                </>
+                                            );
+                                        } else {
+                                            return (
+                                                <div className="action-feedback" style={{ width: '100%' }}>
+                                                    You have already marked this as: <strong>{myActionStatus}</strong>
+                                                </div>
+                                            );
+                                        }
+                                    })()}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

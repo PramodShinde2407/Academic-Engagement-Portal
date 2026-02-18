@@ -158,7 +158,10 @@ h1 {
 .club-edit-form input,
 .club-edit-form textarea,
 .club-edit-form select,
-.add-student-form input {
+.add-student-form input,
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 14px 16px;
@@ -167,16 +170,29 @@ h1 {
   font-size: 1rem;
   width: 100%;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .club-edit-form input:focus,
 .club-edit-form textarea:focus,
 .club-edit-form select:focus,
-.add-student-form input:focus {
+.add-student-form input:focus,
+.modal-content input:focus,
+.modal-content textarea:focus {
   outline: none;
   border-color: #00ffff;
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #e2e8f0;
 }
 
 /* Members List */
@@ -210,10 +226,12 @@ h1 {
   color: #fff;
 }
 
-/* Add Student Modal */
+/* Add Student Modal / Create Event Modal */
 .add-student-form {
   background: #1a1a1a;
-  /* Needed opacity for modal */
+  padding: 24px;
+  margin-bottom: 30px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
   color: #fff;
@@ -221,6 +239,66 @@ h1 {
 
 .add-student-form h3 {
   color: #00ffff;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: #1e293b;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #00ffff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #00ffff 0%, #00bfff 100%);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 /* Dual Action Buttons (Register/Interested) */
@@ -272,4 +350,91 @@ h1 {
   .club-admin-buttons {
     flex-wrap: wrap;
   }
+}
+
+/* ============================
+   CLUB LEADERSHIP CARDS
+============================ */
+.leadership-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.leader-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 220px;
+  background: rgba(6, 182, 212, 0.05);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 14px;
+  padding: 16px 20px;
+  transition: all 0.3s ease;
+}
+
+.leader-card:hover {
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+  transform: translateY(-2px);
+}
+
+.leader-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #06b6d4, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+}
+
+.mentor-avatar {
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  box-shadow: 0 0 14px rgba(124, 58, 237, 0.4);
+}
+
+.leader-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.leader-role-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 4px;
+  padding: 2px 7px;
+  width: fit-content;
+}
+
+.mentor-badge {
+  color: #a78bfa;
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.leader-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.leader-email {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
 }

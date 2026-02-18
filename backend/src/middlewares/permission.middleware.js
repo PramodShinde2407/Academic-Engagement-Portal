@@ -8,6 +8,8 @@ export const isClubHead = async (req, res, next) => {
     try {
         const userId = req.user.id; // from JWT auth middleware
 
+        console.log('🔍 Checking if user', userId, 'is a Club Head...');
+
         // Get user with role
         const [rows] = await db.query(
             `SELECT u.*, r.role_name 
@@ -18,20 +20,27 @@ export const isClubHead = async (req, res, next) => {
         );
 
         if (!rows.length) {
+            console.log('❌ User', userId, 'not found in database');
             return res.status(404).json({ message: "User not found" });
         }
 
         const user = rows[0];
 
+        console.log('   User:', user.name, '| Email:', user.email, '| Role:', user.role_name);
+
         if (user.role_name !== "Club Head") {
+            console.log('❌ Access denied: User has role', user.role_name, 'but needs Club Head role');
             return res.status(403).json({
-                message: "Access denied. Only Club Heads can perform this action."
+                message: `Access denied. Only Club Heads can perform this action. Your current role is: ${user.role_name}`
             });
         }
+
+        console.log('✅ User is a Club Head');
 
         req.userRole = user.role_name;
         next();
     } catch (err) {
+        console.log('❌ Error in isClubHead middleware:', err.message);
         next(err);
     }
 };

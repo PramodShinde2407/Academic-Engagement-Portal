@@ -26,7 +26,7 @@ export default function Account() {
   const [events, setEvents] = useState([]);
 
   // Roles that should only see profile info (no events/clubs)
-  const profileOnlyRoles = ["Estate Manager", "Principal", "Director"];
+  const profileOnlyRoles = ["Estate Manager", "Principal", "Director", "Club Mentor"];
   const isProfileOnly = profileOnlyRoles.includes(user?.role_name);
 
   useEffect(() => {
@@ -116,8 +116,13 @@ export default function Account() {
           <h3>Personal Details</h3>
           <p><b>Name:</b> {user?.name}</p>
           <p><b>Email:</b> {user?.email}</p>
-          <p><b>Department:</b> {user?.department}</p>
-          <p><b>Year:</b> {user?.year}</p>
+          {!["Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
+            <>
+              <p><b>Department:</b> {user?.department}</p>
+              <p><b>Year:</b> {user?.year}</p>
+            </>
+          )}
+          <p><b>Role:</b> <span style={{ color: '#6c63ff', fontWeight: '600' }}>{user?.role_name}</span></p>
         </div>
 
         {/* Events & Sessions - Only show for non-profile-only roles */}
@@ -132,7 +137,7 @@ export default function Account() {
             ) : (
               <div className="events-grid">
                 {events.map((event) => (
-                  <EventCard key={event.event_id} event={event} />
+                  <EventCard key={event.event_id} event={event} isRegistered={true} />
                 ))}
               </div>
             )}
@@ -150,7 +155,7 @@ export default function Account() {
               <div className="clubs-grid">
                 {clubs.map((c) => (
                   <div key={c.club_id} className="club-card-wrapper">
-                    <ClubCard club={c} />
+                    <ClubCard club={c} isEnrolled={true} />
                     {/* Hide Leave button for Head/Mentor */}
                     {user?.id !== c.club_head_id && user?.id !== c.club_mentor_id && (
                       <button

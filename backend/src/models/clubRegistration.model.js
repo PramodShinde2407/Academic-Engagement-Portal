@@ -4,11 +4,22 @@ export const ClubRegistrationModel = {
     create: async ({ club_id, user_id, full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url }) => {
         const [result] = await db.query(
             `INSERT INTO club_application 
-       (club_id, user_id, full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url, status) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')`,
+       (club_id, user_id, full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url, status, head_approval_status, mentor_approval_status) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', 'Pending', 'Pending')`,
             [club_id, user_id, full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url]
         );
         return result.insertId;
+    },
+
+    reapply: async (application_id, data) => {
+        const { full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url } = data;
+        const [result] = await db.query(
+            `UPDATE club_application 
+             SET full_name=?, personal_email=?, college_email=?, roll_no=?, year=?, division=?, department=?, phone_no=?, statement_of_purpose=?, photo_url=?, status='Pending', head_approval_status='Pending', mentor_approval_status='Pending', applied_at=CURRENT_TIMESTAMP
+             WHERE application_id=?`,
+            [full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose, photo_url, application_id]
+        );
+        return result;
     },
 
     getByClubId: async (club_id) => {

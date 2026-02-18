@@ -53,6 +53,7 @@
     margin: 0;
     background: linear-gradient(135deg, #FFF, #94A3B8);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -131,147 +132,169 @@
 }
 
 .application-card {
-    background: rgba(11, 12, 16, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.application-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(6, 182, 212, 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+    background: #1e293b;
+    /* Dark theme card */
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-header {
-    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.applicant-photo {
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
-    /* Square thumbnail as requested (or circular if preferred, user said "circular or square") */
-    object-fit: cover;
-    border: 3px solid #06b6d4;
-    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
 }
 
 .applicant-info h3 {
-    margin: 0 0 8px 0;
-    color: #FFF;
-    font-size: 1.4rem;
-    /* Larger text */
-    font-weight: 700;
-    /* Bold */
+    color: #f1f5f9;
+    margin: 0;
+    font-size: 1.1rem;
 }
 
 .status-badge {
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 2px 8px;
+    border-radius: 99px;
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
+    margin-top: 4px;
+    display: inline-block;
 }
 
 .status-badge.pending {
-    background: rgba(234, 179, 8, 0.1);
-    color: #eab308;
+    background: #451a03;
+    color: #fbbf24;
+    border: 1px solid #fbbf24;
 }
 
 .status-badge.approved {
-    background: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
+    background: #052e16;
+    color: #4ade80;
+    border: 1px solid #4ade80;
 }
 
 .status-badge.rejected {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: #450a0a;
+    color: #f87171;
+    border: 1px solid #f87171;
 }
 
 .card-body {
-    padding: 20px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
 .info-row {
-    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
 }
 
 .label {
-    display: block;
-    color: #94A3B8;
-    font-size: 0.8rem;
-    margin-bottom: 4px;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
 .value {
-    color: #E2E8F0;
-    font-size: 0.95rem;
-    text-decoration: none;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    word-break: break-all;
 }
 
-.sop-section {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+.view-details-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
 }
 
-.sop-text {
-    color: #CBD5E1;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    max-height: 150px;
-    overflow-y: auto;
-    white-space: pre-wrap;
-    background: rgba(255, 255, 255, 0.05);
-    /* Gray block */
-    padding: 16px;
-    border-radius: 8px;
-    border-left: 4px solid #94A3B8;
-    /* Quote style */
-    margin-top: 8px;
-    font-style: italic;
+.view-details-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.approval-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 6px;
+}
+
+.status-pill {
+    text-align: center;
+    padding: 0.25rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-pill.pending {
+    background: rgba(234, 179, 8, 0.1);
+    color: #facc15;
+}
+
+.status-pill.approved {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
 }
 
 .card-actions {
-    padding: 16px 20px;
+    margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 1rem;
 }
 
-.actions-group {
-    display: flex;
-    gap: 12px;
-    width: 100%;
-}
-
-.my-status-pill {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.9rem;
+.approve-btn,
+.reject-btn {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
     font-weight: 600;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.approve-btn {
+    background: #166534;
+    color: #dcfce7;
+}
+
+.reject-btn {
+    background: #991b1b;
+    color: #fee2e2;
+}
+
+.approve-btn:hover,
+.reject-btn:hover {
+    filter: brightness(1.2);
+}
+
+.action-feedback {
     width: 100%;
     text-align: center;
-}
-
-.my-status-pill.approved {
-    background: rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-    border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.my-status-pill.rejected {
-    background: rgba(239, 68, 68, 0.2);
-    color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    font-size: 0.85rem;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+    border-radius: 6px;
 }
 
 .approve-btn,
@@ -319,4 +342,86 @@
     padding: 60px;
     color: #64748B;
     font-size: 1.1rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+.applicant-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.detail-row {
+    flex: 1 1 45%;
+    /* Two columns */
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-row.full-width {
+    flex: 1 1 100%;
+}
+
+.detail-row strong {
+    color: #94a3b8;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.detail-row {
+    color: #e2e8f0;
+}
+
+.sop-text-modal {
+    white-space: pre-wrap;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #06b6d4;
+    line-height: 1.6;
 }

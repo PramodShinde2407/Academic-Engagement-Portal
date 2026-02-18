@@ -20,11 +20,11 @@ export default function NotificationBell() {
             const token = localStorage.getItem('token');
             if (!token) return;
 
-            const res = await api.get('/notifications/all', {
+            const res = await api.get('/notifications/unread', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setNotifications(res.data);
-            setUnreadCount(res.data.filter(n => !n.is_read).length);
+            setUnreadCount(res.data.length);
         } catch (err) {
             console.error('Failed to fetch notifications:', err);
         }
@@ -36,7 +36,10 @@ export default function NotificationBell() {
             await api.put(`/notifications/${notificationId}/mark-read`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            fetchNotifications();
+            // Optimistically update UI
+            setNotifications(prev => prev.filter(n => n.notification_id !== notificationId));
+            setUnreadCount(prev => Math.max(0, prev - 1));
+
             if (link) navigate(link);
             setShowDropdown(false);
         } catch (err) {

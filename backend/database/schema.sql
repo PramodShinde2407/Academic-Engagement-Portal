@@ -25,7 +25,9 @@ CREATE TABLE club (
   name VARCHAR(100),
   description TEXT,
   club_head_id INT,
-  FOREIGN KEY (club_head_id) REFERENCES user(user_id)
+  club_mentor_id INT,
+  FOREIGN KEY (club_head_id) REFERENCES user(user_id),
+  FOREIGN KEY (club_mentor_id) REFERENCES user(user_id)
 );
 
 CREATE TABLE event (

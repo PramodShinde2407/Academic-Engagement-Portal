@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../api/axios";
 import "./PermissionForm.css";
 
@@ -16,6 +16,40 @@ export default function PermissionRequestForm() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
     const [type, setType] = useState(""); // success | error
+    const [clubs, setClubs] = useState([]);
+    const [loadingClubs, setLoadingClubs] = useState(true);
+
+    // Fetch clubs where the user is club head
+    useEffect(() => {
+        const fetchMyClubs = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const user = JSON.parse(localStorage.getItem("user"));
+
+                // Fetch all clubs and filter where user is club head
+                const response = await api.get("/clubs", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                // Filter clubs where this user is the club head
+                const myClubs = response.data.filter(club => club.club_head_id === user.id);
+                setClubs(myClubs);
+
+                // Auto-select if only one club
+                if (myClubs.length === 1) {
+                    setFormData(prev => ({ ...prev, club_id: myClubs[0].club_id }));
+                }
+            } catch (err) {
+                console.error("Failed to fetch clubs:", err);
+                setType("error");
+                setMessage("Failed to load your clubs. Please refresh the page.");
+            } finally {
+                setLoadingClubs(false);
+            }
+        };
+
+        fetchMyClubs();
+    }, []);
 
     const handleChange = (e) => {
         setFormData({
@@ -31,7 +65,7 @@ export default function PermissionRequestForm() {
 
         // Validation
         if (!formData.subject || !formData.description || !formData.location ||
-            !formData.event_date || !formData.start_time || !formData.end_time) {
+            !formData.event_date || !formData.start_time || !formData.end_time || !formData.club_id) {
             setType("error");
             setMessage("All fields are required");
             setLoading(false);
@@ -60,7 +94,7 @@ export default function PermissionRequestForm() {
                 event_date: "",
                 start_time: "",
                 end_time: "",
-                club_id: ""
+                club_id: clubs.length === 1 ? clubs[0].club_id : ""
             });
 
             // Redirect to my requests after 2 seconds
@@ -89,6 +123,29 @@ export default function PermissionRequestForm() {
                 )}
 
                 <form onSubmit={handleSubmit} className="permission-form">
+                    <div className="form-group">
+                        <label htmlFor="club_id">Select Club *</label>
+                        <select
+                            id="club_id"
+                            name="club_id"
+                            value={formData.club_id}
+                            onChange={handleChange}
+                            disabled={loadingClubs || clubs.length === 0}
+                        >
+                            <option value="">-- Select a Club --</option>
+                            {clubs.map(club => (
+                                <option key={club.club_id} value={club.club_id}>
+                                    {club.name}
+                                </option>
+                            ))}
+                        </select>
+                        {!loadingClubs && clubs.length === 0 && (
+                            <small style={{ color: '#e74c3c', marginTop: '5px', display: 'block' }}>
+                                You are not a club head of any club. Only club heads can create permission requests.
+                            </small>
+                        )}
+                    </div>
+
                     <div className="form-group">
                         <label htmlFor="subject">Subject *</label>
                         <input
@@ -176,9 +233,9 @@ export default function PermissionRequestForm() {
                         <button
                             type="submit"
                             className="btn-primary"
-                            disabled={loading}
+                            disabled={loading || loadingClubs || clubs.length === 0}
                         >
-                            {loading ? "Submitting..." : "Submit Request"}
+                            {loading ? "Submitting..." : loadingClubs ? "Loading..." : "Submit Request"}
                         </button>
                     </div>
                 </form>

@@ -1,7 +1,7 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
-import { createClub, getAllClubs, getClubById, updateClub, deleteClub, addStudentToClub, removeStudentFromClub, getClubMembers, toggleRegistration } from "../controllers/club.controller.js";
+import { createClub, getAllClubs, getClubById, updateClub, deleteClub, addStudentToClub, removeStudentFromClub, getClubMembers, toggleRegistration, getMyEnrolledClubs } from "../controllers/club.controller.js";
 
 const router = express.Router();
 
@@ -24,6 +24,14 @@ router.get(
   "/",
   getAllClubs
 );
+
+// Get enrolled clubs (Make sure this is before /:id)
+router.get(
+  "/my/enrolled",
+  authenticate,
+  getMyEnrolledClubs
+);
+
 // Add this below the existing router.get("/") route
 router.get("/:id", getClubById);
 

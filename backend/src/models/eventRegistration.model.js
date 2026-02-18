@@ -10,12 +10,21 @@ export const EventRegistrationModel = {
     );
   },
 
+  // Check if a user is already registered for an event
+  async isAlreadyRegistered(eventId, userId) {
+    const [rows] = await db.query(
+      "SELECT registration_id FROM event_registration WHERE event_id = ? AND student_id = ?",
+      [eventId, userId]
+    );
+    return rows.length > 0;
+  },
+
   // Fetch all events the user has registered for
   async myEvents(userId, userRole) {
     let query;
     let params;
 
-    if (userRole === 'Student') {
+    if (userRole === 1 || userRole === 'Student') {
       // Students: only show events they've registered for
       query = `
         SELECT DISTINCT
@@ -44,6 +53,15 @@ export const EventRegistrationModel = {
     }
 
     const [rows] = await db.query(query, params);
+    return rows;
+  },
+
+  // Get all attendees for a specific event
+  async getAttendees(eventId) {
+    const [rows] = await db.query(
+      "SELECT * FROM event_registration WHERE event_id = ? ORDER BY registered_at DESC",
+      [eventId]
+    );
     return rows;
   }
 };

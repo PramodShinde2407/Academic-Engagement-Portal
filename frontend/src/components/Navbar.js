@@ -58,11 +58,11 @@ export default function Navbar() {
       {/* Left side: Profile circle + PICT PORTAL logo */}
       <div className="nav-left">
         {user && (
-          <div
-            className="profile-circle"
-            onClick={() => navigate("/account")}
-          >
-            {firstLetter}
+          <div className="profile-circle-wrapper" onClick={() => navigate("/account")}>
+            <div className="profile-circle">
+              {firstLetter}
+            </div>
+            <span className="profile-role-badge">{user.role_name}</span>
           </div>
         )}
         <h2 className="portal-title">PICT PORTAL</h2>
@@ -72,17 +72,29 @@ export default function Navbar() {
       <div className="nav-center">
         <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>Home</Link>
 
-        {/* Hide Events and Clubs for authorities */}
-        {!["Estate Manager", "Principal", "Director"].includes(user?.role_name) && (
+        {/* Hide Events and Clubs for authorities and Club Head/Mentor */}
+        {!["Estate Manager", "Principal", "Director", "Club Mentor", "Club Head"].includes(user?.role_name) && (
           <>
             <Link to="/events" className={`nav-link ${isActive('/events') ? 'active' : ''}`}>Events</Link>
             <Link to="/clubs" className={`nav-link ${isActive('/clubs') ? 'active' : ''}`}>Clubs</Link>
           </>
         )}
 
-        {/* Permission System Links */}
-        {user?.role_name === "Club Head" && (
-          <Link to="/my-requests" className={`nav-link ${isActive('/my-requests') ? 'active' : ''}`}>My Requests</Link>
+        {/* Club Head specific links */}
+        {user?.role_name === "Club Head" && user?.club_id && (
+          <>
+            <Link to={`/clubs/${user.club_id}`} className={`nav-link ${isActive(`/clubs/${user.club_id}`) ? 'active' : ''}`}>My Club</Link>
+            <Link to="/my-events" className={`nav-link ${isActive('/my-events') ? 'active' : ''}`}>My Events</Link>
+            <Link to="/my-requests" className={`nav-link ${isActive('/my-requests') ? 'active' : ''}`}>My Requests</Link>
+          </>
+        )}
+
+        {/* Club Mentor specific links */}
+        {user?.role_name === "Club Mentor" && user?.club_id && (
+          <>
+            <Link to={`/clubs/${user.club_id}`} className={`nav-link ${isActive(`/clubs/${user.club_id}`) ? 'active' : ''}`}>My Club</Link>
+            <Link to="/my-events" className={`nav-link ${isActive('/my-events') ? 'active' : ''}`}>My Events</Link>
+          </>
         )}
 
         {["Club Mentor", "Estate Manager", "Principal", "Director"].includes(user?.role_name) && (

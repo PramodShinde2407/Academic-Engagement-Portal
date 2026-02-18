@@ -5,11 +5,16 @@ export const NotificationModel = {
      * Create a new notification (legacy - for permission system)
      */
     create: async (userId, requestId, message, type = 'approval_needed') => {
+        let title = "Permission Update";
+        if (type === 'approval_needed') title = "Action Required";
+        else if (type === 'final_approval') title = "Request Approved";
+        else if (type === 'rejected') title = "Request Rejected";
+
         const [result] = await db.query(
             `INSERT INTO notification 
-       (user_id, request_id, message, type)
-       VALUES (?, ?, ?, ?)`,
-            [userId, requestId, message, type]
+       (user_id, request_id, title, message, type)
+       VALUES (?, ?, ?, ?, ?)`,
+            [userId, requestId, title, message, type]
         );
 
         return result.insertId;

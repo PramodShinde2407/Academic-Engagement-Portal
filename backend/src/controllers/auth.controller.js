@@ -159,12 +159,22 @@ export const login = async (req, res, next) => {
       console.log(`Password mismatch for: ${email}`);
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    console.log(`Login successful for: ${email}`);
+    console.log(`Login successful for: ${email} | Role: ${user.role_name}`);
 
     const token = signToken({
       id: user.user_id,
       role_id: user.role_id
     });
+
+    // 🔹 Fetch club_id for Club Head (role 2) and Club Mentor (role 5)
+    let club_id = null;
+    if (user.role_id === 2) {
+      const [[headClub]] = await db.query("SELECT club_id FROM club WHERE club_head_id = ?", [user.user_id]);
+      if (headClub) club_id = headClub.club_id;
+    } else if (user.role_id === 5) {
+      const [[mentorClub]] = await db.query("SELECT club_id FROM club WHERE club_mentor_id = ?", [user.user_id]);
+      if (mentorClub) club_id = mentorClub.club_id;
+    }
 
     // ✅ SEND USER DATA TO FRONTEND
     res.json({
@@ -176,7 +186,8 @@ export const login = async (req, res, next) => {
         department: user.department,
         year: user.year,
         role_id: user.role_id,
-        role_name: user.role_name
+        role_name: user.role_name,
+        club_id  // 🔹 included so frontend can check club ownership
       }
     });
   } catch (err) {

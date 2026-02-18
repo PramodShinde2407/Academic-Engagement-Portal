@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import './Card.css';
 
-export default function ClubCard({ club, onJoin }) {
+export default function ClubCard({ club, onJoin, isEnrolled }) {
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user?.role_id === 4;
 
   const handleJoin = () => {
     if (onJoin) {
@@ -13,6 +15,8 @@ export default function ClubCard({ club, onJoin }) {
   const handleDetails = () => {
     navigate(`/clubs/${club.club_id}`, { state: { club } });
   };
+
+  const showJoin = !isAdmin && !isEnrolled;
 
   return (
     <div className="card">
@@ -43,7 +47,7 @@ export default function ClubCard({ club, onJoin }) {
       </div>
 
       <div className="card-buttons">
-        <button onClick={handleJoin}>Join</button>
+        {showJoin && <button onClick={handleJoin}>Join</button>}
         <button onClick={handleDetails}>Details</button>
       </div>
     </div>

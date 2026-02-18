@@ -11,17 +11,6 @@ const __dirname = path.dirname(__filename);
 export const submitRegistration = async (req, res) => {
     try {
         const { clubId } = req.params;
-        const { full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose } = req.body;
-        const user_id = req.user?.id || null;
-
-        // Check for existing pending application
-        if (user_id) {
-            const existingApp = await ClubRegistrationModel.getByUserAndClub(user_id, clubId);
-            if (existingApp && existingApp.status === 'Pending') {
-                return res.status(400).json({ message: 'You already have a pending application for this club.' });
-            }
-        }
-
 
         // Check if file is uploaded
         if (!req.file) {
@@ -37,22 +26,52 @@ export const submitRegistration = async (req, res) => {
         }
 
         const photo_url = `/uploads/club-registrations/${req.file.filename}`;
+        const { full_name, personal_email, college_email, roll_no, year, division, department, phone_no, statement_of_purpose } = req.body;
+        const user_id = req.user?.id || null;
 
-        // Create registration
-        const applicationId = await ClubRegistrationModel.create({
-            club_id: clubId,
-            user_id,
-            full_name,
-            personal_email,
-            college_email,
-            roll_no,
-            year,
-            division,
-            department,
-            phone_no,
-            statement_of_purpose,
-            photo_url
-        });
+        // Check for existing application (Pending or Rejected)
+        let applicationId;
+        if (user_id) {
+            const existingApp = await ClubRegistrationModel.getByUserAndClub(user_id, clubId);
+            if (existingApp) {
+                if (existingApp.status === 'Pending') {
+                    return res.status(400).json({ message: 'You already have a pending application for this club.' });
+                } else {
+                    // Re-apply (Update existing row)
+                    await ClubRegistrationModel.reapply(existingApp.application_id, {
+                        full_name,
+                        personal_email,
+                        college_email,
+                        roll_no,
+                        year,
+                        division,
+                        department,
+                        phone_no,
+                        statement_of_purpose,
+                        photo_url
+                    });
+                    applicationId = existingApp.application_id;
+                }
+            }
+        }
+
+        // Create registration ONLY if not already reapplied
+        if (!applicationId) {
+            applicationId = await ClubRegistrationModel.create({
+                club_id: clubId,
+                user_id,
+                full_name,
+                personal_email,
+                college_email,
+                roll_no,
+                year,
+                division,
+                department,
+                phone_no,
+                statement_of_purpose,
+                photo_url
+            });
+        }
 
         // Notify club head AND club mentor
         const club = await ClubModel.getById(clubId);
@@ -65,9 +84,9 @@ export const submitRegistration = async (req, res) => {
             for (const recipientId of recipients) {
                 await NotificationModel.createNotification({
                     user_id: recipientId,
-                    title: 'New Club Registration',
-                    message: `${full_name} has applied to join ${club.name}`,
-                    type: 'info',
+                    title: 'New Club Membership Request',
+                    message: `${full_name} has requested to join ${club.name}. Review application now.`,
+                    type: 'action_required',
                     link: `/clubs/${clubId}/applications`
                 });
             }
@@ -105,9 +124,18 @@ export const getApplications = async (req, res) => {
     try {
         const { clubId } = req.params;
 
-        // Verify user is club head
+        // Verify user is club head or mentor
         const club = await ClubModel.getById(clubId);
-        if (!club || club.club_head_id !== req.user.id) {
+
+        if (!club) {
+            return res.status(404).json({ message: 'Club not found' });
+        }
+
+        const isHead = club.club_head_id === req.user.id;
+        const isMentor = club.club_mentor_id === req.user.id;
+        const isAdmin = req.user.role === 4;
+
+        if (!isHead && !isMentor && !isAdmin) {
             return res.status(403).json({ message: 'Unauthorized' });
         }
 

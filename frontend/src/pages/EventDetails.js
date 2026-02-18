@@ -11,7 +11,10 @@ export default function EventDetails() {
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({});
   const [toast, setToast] = useState(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // ✅ toast confirmation
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [attendees, setAttendees] = useState([]);
+  const [showAttendees, setShowAttendees] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
 
   // Load logged-in user
   useEffect(() => {
@@ -37,13 +40,33 @@ export default function EventDetails() {
     }
   };
 
+  const fetchAttendees = async () => {
+    try {
+      const res = await api.get(`/event-registrations/${eventId}/attendees`);
+      setAttendees(res.data);
+    } catch (err) {
+      // User likely not authorized, ignore
+    }
+  };
+
   useEffect(() => {
     fetchEvent();
   }, [eventId]);
 
+  useEffect(() => {
+    if (user && event) {
+      fetchAttendees();
+    }
+  }, [user, event]);
+
   if (!event || !user) return <p>Loading Events/Sessions...</p>;
 
-  const canManageEvent = user.id === event.organizer_id || user.role_name === "Admin" || user.role_id === 4;
+  const canManageEvent =
+    user.id === event.organizer_id ||
+    user.id === event.club_head_id ||
+    user.id === event.club_mentor_id ||
+    user.role_name === "Admin" ||
+    user.role_id === 4;
 
   // Handle input changes in edit form
   const handleChange = (e) => {
@@ -57,7 +80,7 @@ export default function EventDetails() {
       await api.put(`/events/${event.event_id}`, payload);
       setToast({ message: "Event/Session updated successfully! 🎉", type: "success" });
       setEditMode(false);
-      fetchEvent(); // Refresh details
+      fetchEvent();
       setTimeout(() => setToast(null), 2500);
     } catch (err) {
       console.error(err);
@@ -101,6 +124,16 @@ export default function EventDetails() {
           <p><b>Additional Info:</b> {event.additional_info || "N/A"}</p>
           <p><b>Conducted By:</b> {event.conducted_by || "N/A"}</p>
 
+          {/* ====== ENROLLED COUNT (visible to managers) ====== */}
+          {canManageEvent && (
+            <div className="enrolled-count-badge">
+              <span className="enrolled-icon">👥</span>
+              <span className="enrolled-text">
+                Total Enrolled: <strong>{attendees.length}</strong> student{attendees.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+          )}
+
           {canManageEvent && (
             <div className="event-buttons">
               <button className="edit-btn" onClick={() => setEditMode(true)}>Edit Event/Session Details</button>
@@ -110,6 +143,92 @@ export default function EventDetails() {
               >
                 Delete Event/Session
               </button>
+            </div>
+          )}
+
+          {/* ====== SEE ENROLLED STUDENTS BUTTON ====== */}
+          {canManageEvent && attendees.length > 0 && (
+            <div style={{ marginTop: "24px" }}>
+              <button
+                className="see-enrolled-btn"
+                onClick={() => setShowAttendees(!showAttendees)}
+              >
+                {showAttendees ? "▲ Hide Enrolled Students" : `▼ See Enrolled Students (${attendees.length})`}
+              </button>
+            </div>
+          )}
+
+          {/* ====== ENROLLED STUDENTS LIST ====== */}
+          {canManageEvent && showAttendees && attendees.length > 0 && (
+            <div className="attendees-section">
+              <h2>Enrolled Students ({attendees.length})</h2>
+              <div className="attendees-list">
+                {attendees.map((att, index) => (
+                  <div
+                    key={att.registration_id}
+                    className="student-card"
+                    onClick={() => setSelectedStudent(att)}
+                  >
+                    <div className="student-card-avatar">
+                      {(att.full_name || "?").charAt(0).toUpperCase()}
+                    </div>
+                    <div className="student-card-info">
+                      <span className="student-card-name">{att.full_name || "Unknown"}</span>
+                      <span className="student-card-meta">{att.department} · Year {att.year}</span>
+                    </div>
+                    <span className="student-card-arrow">›</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ====== STUDENT DETAIL MODAL ====== */}
+          {selectedStudent && (
+            <div className="student-modal-overlay" onClick={() => setSelectedStudent(null)}>
+              <div className="student-modal" onClick={(e) => e.stopPropagation()}>
+                <button className="modal-close-btn" onClick={() => setSelectedStudent(null)}>✕</button>
+                <div className="modal-avatar">
+                  {(selectedStudent.full_name || "?").charAt(0).toUpperCase()}
+                </div>
+                <h2 className="modal-name">{selectedStudent.full_name}</h2>
+                <div className="modal-details">
+                  <div className="modal-detail-row">
+                    <span className="modal-label">📧 Email</span>
+                    <span className="modal-value">{selectedStudent.email || "N/A"}</span>
+                  </div>
+                  <div className="modal-detail-row">
+                    <span className="modal-label">📞 Phone</span>
+                    <span className="modal-value">{selectedStudent.phone || "N/A"}</span>
+                  </div>
+                  <div className="modal-detail-row">
+                    <span className="modal-label">🏫 Department</span>
+                    <span className="modal-value">{selectedStudent.department || "N/A"}</span>
+                  </div>
+                  <div className="modal-detail-row">
+                    <span className="modal-label">📅 Year</span>
+                    <span className="modal-value">{selectedStudent.year || "N/A"}</span>
+                  </div>
+                  <div className="modal-detail-row">
+                    <span className="modal-label">🎫 Roll No</span>
+                    <span className="modal-value">{selectedStudent.roll_no || "N/A"}</span>
+                  </div>
+                  {selectedStudent.notes && (
+                    <div className="modal-detail-row">
+                      <span className="modal-label">📝 Notes</span>
+                      <span className="modal-value">{selectedStudent.notes}</span>
+                    </div>
+                  )}
+                  <div className="modal-detail-row">
+                    <span className="modal-label">🕐 Registered At</span>
+                    <span className="modal-value">
+                      {selectedStudent.registered_at
+                        ? new Date(selectedStudent.registered_at).toLocaleString()
+                        : "N/A"}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

@@ -20,6 +20,7 @@ import PermissionRequestForm from "./components/PermissionRequestForm";
 import MyRequestsList from "./components/MyRequestsList";
 import ApprovalDashboard from "./components/ApprovalDashboard";
 import ClubApplications from "./pages/ClubApplications";
+import MyEvents from "./pages/MyEvents";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route path="/events/:eventId/register" element={<EventRegisterPage />} />
         <Route path="/about" element={<About />} /> {/* About Us page */}
         <Route path="/contact" element={<Contact />} /> {/* Contact Us page */}
+        <Route path="/my-events" element={<MyEvents />} /> {/* Club Mentor events */}
       </Routes>
     </BrowserRouter>
   );

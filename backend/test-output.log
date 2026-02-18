@@ -1,0 +1,68 @@
+Starting test...
+Simulating registration for Event ID: 14
+Event fetched: {"event_id":14,"title":"CSI Test Event","description":"Testing notifications","date":"2026-02-28T18:30:00.000Z","venue":"Lab 1","status":"APPROVED","club_id":19,"organizer_id":15,"created_at":"2026-02-14T14:06:59.000Z","additional_info":null,"conducted_by":null,"permission_emails":null}
+Club fetched: {"club_id":19,"name":"CSI","description":"Coding club","club_head_id":15,"club_mentor_id":14,"secret_key":"csihead","tagline":"","category":"","activities":null,"is_registration_open":0,"registration_deadline":null,"permission_emails":null,"club_mentor_key":"csimentor"}
+Recipients: [15,14]
+Creating notification for User 15...
+SUCCESS: Created Notification ID 31 for User 15
+Creating notification for User 14...
+SUCCESS: Created Notification ID 32 for User 14
+
+--- VERIFICATION ---
+[
+  {
+    "notification_id": 32,
+    "user_id": 14,
+    "request_id": null,
+    "title": "Test Notification",
+    "message": "Test message for User 14",
+    "type": "info",
+    "link": "/test-link",
+    "is_read": 0,
+    "created_at": "2026-02-15T04:30:43.000Z"
+  },
+  {
+    "notification_id": 31,
+    "user_id": 15,
+    "request_id": null,
+    "title": "Test Notification",
+    "message": "Test message for User 15",
+    "type": "info",
+    "link": "/test-link",
+    "is_read": 0,
+    "created_at": "2026-02-15T04:30:43.000Z"
+  },
+  {
+    "notification_id": 30,
+    "user_id": 14,
+    "request_id": null,
+    "title": "New Event Registration",
+    "message": "Test Student has registered for CSI Test Event",
+    "type": "info",
+    "link": "/clubs/19",
+    "is_read": 0,
+    "created_at": "2026-02-15T04:29:13.000Z"
+  },
+  {
+    "notification_id": 29,
+    "user_id": 15,
+    "request_id": null,
+    "title": "New Event Registration",
+    "message": "Test Student has registered for CSI Test Event",
+    "type": "info",
+    "link": "/clubs/19",
+    "is_read": 0,
+    "created_at": "2026-02-15T04:29:13.000Z"
+  },
+  {
+    "notification_id": 28,
+    "user_id": 19,
+    "request_id": null,
+    "title": "Welcome to AWS!",
+    "message": "Congratulations! Your application has been fully approved. You are now a member.",
+    "type": "success",
+    "link": null,
+    "is_read": 0,
+    "created_at": "2026-02-14T17:22:56.000Z"
+  }
+]

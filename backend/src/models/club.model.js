@@ -36,7 +36,18 @@ export const ClubModel = {
   },
 
   getById: async (clubId) => {
-    const [rows] = await db.query("SELECT * FROM club WHERE club_id = ?", [clubId]);
+    const [rows] = await db.query(`
+      SELECT 
+        c.*,
+        head.name AS club_head_name,
+        head.email AS club_head_email,
+        mentor.name AS club_mentor_name,
+        mentor.email AS club_mentor_email
+      FROM club c
+      LEFT JOIN user head ON c.club_head_id = head.user_id
+      LEFT JOIN user mentor ON c.club_mentor_id = mentor.user_id
+      WHERE c.club_id = ?
+    `, [clubId]);
     return rows[0];
   },
 
