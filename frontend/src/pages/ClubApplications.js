@@ -72,40 +72,7 @@ export default function ClubApplications() {
         }
     };
 
-    // Export function removed as per new requirements
 
-
-    const handleBulkAction = async (newStatus) => {
-        const pendingApps = applications.filter(app => app.status === 'Pending');
-        if (pendingApps.length === 0) {
-            showToast('No pending applications to update', 'info');
-            return;
-        }
-
-        if (!window.confirm(`Are you sure you want to ${newStatus} ALL ${pendingApps.length} pending applications?`)) {
-            return;
-        }
-
-        try {
-            setLoading(true);
-            const token = localStorage.getItem('token');
-            await Promise.all(pendingApps.map(app =>
-                api.put(
-                    `/club-registrations/${app.application_id}/status`,
-                    { status: newStatus },
-                    { headers: { Authorization: `Bearer ${token}` } }
-                )
-            ));
-
-            showToast(`Bulk ${newStatus} completed successfully`);
-            fetchData();
-        } catch (err) {
-            console.error(err);
-            showToast('Bulk update failed', 'error');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const filteredApps = applications.filter(app =>
         filter === 'all' ? true : app.status === filter
@@ -127,17 +94,6 @@ export default function ClubApplications() {
                 </div>
 
                 <div className="header-actions">
-                    {canManage && (
-                        <>
-                            <button className="bulk-btn approve" onClick={() => handleBulkAction('Approved')}>
-                                Approve All ✅
-                            </button>
-                            <button className="bulk-btn reject" onClick={() => handleBulkAction('Rejected')}>
-                                Reject All ❌
-                            </button>
-                        </>
-                    )}
-
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
@@ -148,9 +104,6 @@ export default function ClubApplications() {
                         <option value="Rejected">Rejected</option>
                         <option value="all">All Applications</option>
                     </select>
-
-
-
                 </div>
             </div>
 
