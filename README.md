@@ -157,7 +157,7 @@ Student / Club Head submits Permission Request
        ↓
   Club Head + Club Mentor receive final approval notification
 ```
-
+ 
 **Key rules:**
 - Each authority only sees requests relevant to their level
 - Club Mentors only see requests from **their own club** (not all clubs)
@@ -443,11 +443,16 @@ cd Academic-Engagement-Portal
 ```bash
 # Create the database in MySQL
 mysql -u root -p
-CREATE DATABASE academic_portal;
-USE academic_portal;
+CREATE DATABASE college_db;
+USE college_db;
 
 # Run the schema (from the database folder)
-source backend/database/schema.sql;
+# Run the complete database setup (includes all tables and initial data)
+# Using MySQL Command Line:
+mysql -u root -p college_db < backend/database/full_backup.sql
+
+# OR using MySQL Workbench:
+# Server > Data Import > Import from Self-Contained File > Select 'backend/database/full_backup.sql'
 ```
 
 ### 3. Configure the backend
@@ -483,7 +488,7 @@ Create a `.env` file in the `backend/` directory:
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password
-DB_NAME=academic_portal
+DB_NAME=college_db
 DB_PORT=3306
 
 # JWT

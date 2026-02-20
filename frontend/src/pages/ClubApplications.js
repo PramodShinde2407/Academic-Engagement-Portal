@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ClubApplications.css';
-import api from '../api/axios';
+import api, { BACKEND_URL } from '../api/axios';
 
 export default function ClubApplications() {
     const { clubId } = useParams();
@@ -128,7 +128,7 @@ export default function ClubApplications() {
                             <div key={app.application_id} className="application-card">
                                 <div className="card-header">
                                     <img
-                                        src={`http://localhost:5000${app.photo_url}`}
+                                        src={`${BACKEND_URL}${app.photo_url}`}
                                         alt={app.full_name}
                                         className="applicant-photo"
                                         onError={(e) => { e.target.src = 'https://via.placeholder.com/150'; }}

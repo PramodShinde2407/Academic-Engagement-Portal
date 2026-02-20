@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ClubDetails.css";
-import api from "../api/axios";
+import api, { BACKEND_URL } from "../api/axios";
 import RegistrationModal from "../components/RegistrationModal";
 
 export default function ClubDetails() {
@@ -599,7 +599,7 @@ export default function ClubDetails() {
             <div style={{ display: "flex", alignItems: "center", gap: "20px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "20px", marginBottom: "20px" }}>
               {selectedMember.photo_url ? (
                 <img
-                  src={selectedMember.photo_url.startsWith("http") ? selectedMember.photo_url : `http://localhost:5000/${selectedMember.photo_url.replace(/\\/g, "/").replace(/^\/+/, "")}`}
+                  src={selectedMember.photo_url.startsWith("http") ? selectedMember.photo_url : `${BACKEND_URL}/${selectedMember.photo_url.replace(/\\/g, "/").replace(/^\/+/, "")}`}
                   alt="Profile"
                   style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", border: "2px solid #00ffff" }}
                   onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}

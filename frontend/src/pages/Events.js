@@ -13,14 +13,8 @@ export default function Events() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:5000/api/events", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setEvents(data);
+      const res = await api.get("/events");
+      setEvents(res.data);
 
       // Fetch registered events for the current user
       if (user) {
